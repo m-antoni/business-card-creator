@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import 'bootswatch/dist/minty/bootstrap.min.css';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import './Layouts/css/Global.css';
 import { Provider } from 'react-redux';
@@ -9,13 +10,10 @@ import { store, persistor }  from './store';
 import PrivateRoute from './Utils/PrivateRoute';
 import PublicRoute from './Utils/PublicRoute';
 
-// Public Route
-import Login from './Components/Public/Login';
-import Register from './Components/Public/Register';
-import PageNotFound from './Components/Public/PageNotFound';
-
-// Private Route
-import Home from './Components/Private/Home';
+import Home from './Components/Public/Home';
+import Generate from './Components/Public/Generate';
+import QuaratinePass from './Components/Public/QuaratinePass';
+import TravelPass from './Components/Public/TravelPass';
 
 function App() {
   return (
@@ -24,12 +22,10 @@ function App() {
         <PersistGate persistor={persistor}>
             <Fragment>
               <Switch>
-                <PublicRoute path="/login" exact component={Login}/>
-                <PublicRoute path="/register" exact component={Register}/>
-
-                <PrivateRoute path="/" exact component={Home} />
-                
-                <PublicRoute component={PageNotFound} />
+                  <Route path="/" exact component={Home}/>
+                  <Route path="/generate" exact component={Generate}/>
+                  <Route path="/generate/quarantine-pass" exact component={QuaratinePass}/>
+                  <Route path="/generate/travel-pass" exact component={TravelPass}/>
               </Switch>
             </Fragment>
         </PersistGate>

@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage';
 
 // All reducers
 import authReducer from './auth.reducer';
+import quarantinePassReducer from './quarantine_pass.reducer';
 
 // persist config 
 const persistConfig = {
@@ -15,6 +16,7 @@ const persistConfig = {
 // combining all reducers
 const rootReducer = combineReducers({
     auth: authReducer,
+    quarantine_pass: quarantinePassReducer
 });
 
 export default persistReducer(persistConfig, rootReducer);
