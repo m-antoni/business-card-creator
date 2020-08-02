@@ -11,9 +11,11 @@ import PrivateRoute from './Utils/PrivateRoute';
 import PublicRoute from './Utils/PublicRoute';
 
 import Home from './Components/Public/Home';
-import Generate from './Components/Public/Generate';
-import QuaratinePass from './Components/Public/QuaratinePass';
-import TravelPass from './Components/Public/TravelPass';
+import SignUp from './Components/Public/SignUp';
+import SignIn from './Components/Public/SignIn';
+import ForgotPassword from './Components/Public/ForgotPassword';
+
+import Dashboard from './Components/Private/Dashboard';
 
 function App() {
   return (
@@ -22,10 +24,11 @@ function App() {
         <PersistGate persistor={persistor}>
             <Fragment>
               <Switch>
-                  <Route path="/" exact component={Home}/>
-                  <Route path="/generate" exact component={Generate}/>
-                  <Route path="/generate/quarantine-pass" exact component={QuaratinePass}/>
-                  <Route path="/generate/travel-pass" exact component={TravelPass}/>
+                  <PublicRoute path="/signup" exact component={SignUp}/>
+                  <PublicRoute path="/forgot-password" exact component={ForgotPassword}/>
+                  <PublicRoute path="/" exact component={SignIn}/>
+                  <PrivateRoute path="/auth/dashboard" exact component={Dashboard}/>
+
               </Switch>
             </Fragment>
         </PersistGate>

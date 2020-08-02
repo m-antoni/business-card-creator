@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { getToken } from './Common';
+import { getUID } from './Common';
+
  
 // handle the public routes
 function PublicRoute({ component: Component, ...rest }) {
+
   return (
     <Route
       {...rest}
-      render={(props) => !getToken() ? <Component {...props} /> : <Redirect to={{ pathname: '/home' }} />}
+      render={(props) => !getUID() ? <Component {...props} /> : <Redirect to={'/auth/dashboard'} />}
     />
   )
 }

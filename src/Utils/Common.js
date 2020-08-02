@@ -1,25 +1,22 @@
 // return the user data from the session storage
 export const getUser = () => {
-    const userStr = localStorage.getItem('user');
+    const userStr = localStorage.getItem('firebase:auth');
     if (userStr) return JSON.parse(userStr);
     else return null;
   }
-  
-// return the token from the session storage
-export const getToken = () => {
-  return localStorage.getItem('token') || null;
+
+export const getUID = () => {
+  return localStorage.getItem('firebase:uid') || null;
 }
 
-// remove the token and user from the session storage
 export const removeUserSession = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
+  localStorage.removeItem('firebase:auth');
+  localStorage.removeItem('firebase:uid');
 }
 
-// set the token and user from the session storage
-export const setUserSession = (token, user) => {
-  localStorage.setItem('token', token);
-  localStorage.setItem('user', JSON.stringify(user));
+export const setUserSession = (param) => {
+  localStorage.setItem('firebase:auth', JSON.stringify(param));
+  localStorage.setItem('firebase:uid', param.uid);
 }
   
 // display current date

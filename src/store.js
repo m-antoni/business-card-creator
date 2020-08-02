@@ -3,12 +3,14 @@ import { persistStore } from 'redux-persist';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import rootReducer from './Redux/reducers/_index';
+import { getFirestore, reduxFirestore } from 'redux-firestore';
+import { getFirebase, reactReduxFirebase } from 'react-redux-firebase';
+import logger from 'redux-logger'
+import firebase from './Services/firebase';
 
-const initialState = {};
+const middleware = [thunk];
 
-const middleware = [thunk]; // thunk is for async actions
-
-export const store = createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(...middleware)));
+export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...middleware)));
 
 export const persistor = persistStore(store);
 
