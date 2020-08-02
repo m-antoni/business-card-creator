@@ -3,6 +3,7 @@ import firebase from '../../../Services/firebase';
 import { SwalSuccess, SwalError } from '../../../Utils/SweetAlert';
 import countryList from 'react-select-country-list';
 import { setUserSession, removeUserSession } from '../../../Utils/Common';
+import { ToastQuestion } from '../../../Utils/Toast';
 
 export const setLoading = (status) => async dispatch => dispatch({ type: SET_LOADING, payload: status });
 
@@ -43,7 +44,6 @@ export const handleSignIn = e => async (dispatch, getState) => {
             setUserSession(setUserParam);
             
             let base_url = window.location.origin + '/dashboard';
-            
             return window.location.href = base_url;
         })
         .catch((err) => {
@@ -113,14 +113,14 @@ export const handleSignUp = e => async (dispatch, getState) => {
 }
 
 export const handleSignOut = () => async dispatch => {
-    
+    dispatch(setLoading(true));
     firebase.auth().signOut().then(() => {
         console.log('Sign Out Success')
-        dispatch({ type: SIGN_OUT_SUCCESS })
-        removeUserSession();
+        removeUserSession();    
         window.location.reload();
     });
 }
+
 
 export const  sendToEmailPassword = () => async dispatch => {
     

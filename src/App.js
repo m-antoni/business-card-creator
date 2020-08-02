@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import 'bootswatch/dist/minty/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import './Layouts/css/Global.css';
 import { Provider } from 'react-redux';

@@ -13,9 +13,8 @@ function SignUp({ auth: { loading, country_data }, handleInputOnChange, handleSe
     return (
         <div className="container">
             <div className="row">
-               <div className="mx-auto col-md-5">
-                    <div className="my-5 card card-body">
-                        <h4 classNam="text-center">Sign Up</h4> <hr/>
+               <div className="mx-auto col-md-6 col-lg-6">
+                    <div className="mt-3 card card-body">
                         {
                             loading ? <div className="my-5"><MiniSpinner/></div>
                             :

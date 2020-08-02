@@ -1,38 +1,18 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { MiniSpinner } from '../../Layouts/Spinner';
-import { handleInputOnChange, handleSignIn, clearAuth } from '../../Redux/actions/auth/auth.actions';
+import { handleInputOnChange, handleSignIn } from '../../Redux/actions/auth/auth.actions';
 import firebase from '../../Services/firebase';
 import { withRouter } from 'react-router-dom';
 
-function SignIn({ auth: { loading }, handleInputOnChange, handleSignIn, clearAuth }) {
+function SignIn({ auth: { loading }, handleInputOnChange, handleSignIn }) {
     
-    useEffect(() => {
-        clearAuth();
-    },[])
-
-
-    // firebase.auth().onAuthStateChanged((user) => {
-    //     if(user)
-    //     {
-    //         // console.log(user)
-    //         setID(firebase.auth().currentUser.uid);
-    //     }
-    //     else
-    //     {
-    //         setID(null);
-    //     }
-    // })
-
-    // console.log(id)
-
-
     return (
         <div className="container">
             <div className="row">
                <div className="mx-auto col-md-5">
                     <div className="my-5 card card-body">
-                        <h4 classNam="text-center">Sign In</h4> <hr/>
+                        <div className="text-center"><i className="fa fa-user-circle fa-5x text-primary"></i></div><hr/>
                         {
                             loading ? <div className="my-5"><MiniSpinner/></div>
                             :
@@ -65,4 +45,4 @@ const mapStateProps = state => ({
     auth: state.auth
 })
 
-export default connect(mapStateProps, { handleInputOnChange, handleSignIn, clearAuth })(withRouter(SignIn))
+export default connect(mapStateProps, { handleInputOnChange, handleSignIn })(withRouter(SignIn))

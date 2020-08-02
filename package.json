@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "animate.css": "^4.1.0",
     "axios": "^0.19.2",
+    "bootstrap": "^4.5.0",
     "bootswatch": "^4.5.0",
     "firebase": "^7.17.1",
     "izitoast": "^1.4.0",
