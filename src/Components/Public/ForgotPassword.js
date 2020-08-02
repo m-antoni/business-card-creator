@@ -20,7 +20,7 @@ function ForgorPassword({ auth: { loading }, handleInputOnChange, sendToEmailPas
                                     <input onChange={handleInputOnChange} type="email" name="email" className="form-control" required/>
                                 </div>
                                 <div className="form-group mt-4">
-                                    <button onClick={sendToEmailPassword} type="button" class="btn btn-primary btn-block">Send Password</button>
+                                    <button onClick={sendToEmailPassword} type="button" class="btn btn-dark btn-block">Send Password</button>
                                     <a href="/" class="btn btn-danger btn-block">Go back</a>
                                 </div>
                             </form>

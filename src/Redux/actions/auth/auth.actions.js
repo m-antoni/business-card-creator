@@ -24,29 +24,6 @@ export const handleSelectCountry = (selectOption) => async dispatch => {
 }
 
 
-export const handleSignUp = e => async (dispatch, getState) => {
-    e.preventDefault();
-    // dispatch(setLoading(true));
-
-    // let { quarantine_pass_params } = getState().quarantine_pass;
-
-    // firebase.firestore().collection('quarantine_passes').add({
-    //     ...quarantine_pass_params,
-    //     created_at: new Date()
-    // })
-    // .then(() => {
-    //     dispatch(setLoading(false));
-    //     dispatch(clearQuarantinePass());
-    //     SwalSuccess('Data has been saved');
-    // })
-    // .catch((error) => {
-    //     SwalError('Something went wrong.');
-    //     console.log(error);
-    // })
-    
-}
-
-
 export const handleSignIn = e => async (dispatch, getState) => {
     e.preventDefault();
 
@@ -55,19 +32,19 @@ export const handleSignIn = e => async (dispatch, getState) => {
     dispatch(setLoading(true));
     firebase.auth().signInWithEmailAndPassword(sign_in_email, sign_in_password)
         .then(() => {
-            dispatch(setLoading(false));
-
-            dispatch({ type: AUTH_SUCCESS });
     
             const setUserParam = {
-                // name: firebase.auth().currentUser.displayName,
+                name: firebase.auth().currentUser.displayName,
                 email: firebase.auth().currentUser.email,
                 photoUrl: firebase.auth().currentUser.photoURL,
                 emailVerified: firebase.auth().currentUser.emailVerified,
                 uid: firebase.auth().currentUser.uid,
             }
             setUserSession(setUserParam);
-            window.location.reload();
+            
+            let base_url = window.location.origin + '/dashboard';
+            
+            return window.location.href = base_url;
         })
         .catch((err) => {
             dispatch(setLoading(false));
@@ -77,6 +54,63 @@ export const handleSignIn = e => async (dispatch, getState) => {
         });
 }
 
+
+export const handleSignUp = e => async (dispatch, getState) => {
+    e.preventDefault();
+
+    const { input_params } = getState().auth;
+
+    if(input_params.password != input_params.confirm_password)
+    {
+        SwalError('password and confirm password are not the same');
+    }
+    else
+    {
+        dispatch(setLoading(true));
+
+        firebase.auth().createUserWithEmailAndPassword(input_params.email, input_params.password)
+            .then((res) => {
+
+                const db = firebase.firestore();
+                // store user data
+                return db.collection('users').doc(res.user.uid).set({
+                    name: input_params.name,
+                    age: input_params.age,
+                    street: input_params.street,
+                    country: input_params.country,
+                    phone: input_params.phone,
+                    created_at: firebase.firestore.FieldValue.serverTimestamp(),
+                    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+                })
+
+            })
+            .then(() => {
+
+                // sign in the user
+                firebase.auth().signInWithEmailAndPassword(input_params.email, input_params.password)
+
+                const setUserParam = {
+                    name: firebase.auth().currentUser.displayName,
+                    email: firebase.auth().currentUser.email,
+                    photoUrl: firebase.auth().currentUser.photoURL,
+                    emailVerified: firebase.auth().currentUser.emailVerified,
+                    uid: firebase.auth().currentUser.uid,
+                }
+                
+                setUserSession(setUserParam);
+                window.location.reload();
+                dispatch(clearAuth());
+                dispatch(setLoading(false));
+            })
+            .catch((err) => {
+                dispatch(setLoading(false));
+                dispatch(clearAuth());
+                SwalError('Something went wrong...');
+                console.log(`Error: ${err}`);
+            })
+    }
+
+}
 
 export const handleSignOut = () => async dispatch => {
     

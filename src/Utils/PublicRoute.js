@@ -9,7 +9,7 @@ function PublicRoute({ component: Component, ...rest }) {
   return (
     <Route
       {...rest}
-      render={(props) => !getUID() ? <Component {...props} /> : <Redirect to={'/auth/dashboard'} />}
+      render={(props) => !getUID() ? <Component {...props} /> : <Redirect to={'/dashboard'} />}
     />
   )
 }

@@ -24,11 +24,10 @@ function App() {
         <PersistGate persistor={persistor}>
             <Fragment>
               <Switch>
+                  <PublicRoute path="/" exact component={SignIn}/>
                   <PublicRoute path="/signup" exact component={SignUp}/>
                   <PublicRoute path="/forgot-password" exact component={ForgotPassword}/>
-                  <PublicRoute path="/" exact component={SignIn}/>
-                  <PrivateRoute path="/auth/dashboard" exact component={Dashboard}/>
-
+                  <PrivateRoute path="/dashboard" exact component={Dashboard}/>
               </Switch>
             </Fragment>
         </PersistGate>
