@@ -75,10 +75,6 @@ export const handleSignUp = e => async (dispatch, getState) => {
                 // store user data
                 return db.collection('users').doc(res.user.uid).set({
                     name: input_params.name,
-                    age: input_params.age,
-                    street: input_params.street,
-                    country: input_params.country,
-                    phone: input_params.phone,
                     created_at: firebase.firestore.FieldValue.serverTimestamp(),
                     updated_at: firebase.firestore.FieldValue.serverTimestamp(),
                 })
@@ -98,9 +94,8 @@ export const handleSignUp = e => async (dispatch, getState) => {
                 }
                 
                 setUserSession(setUserParam);
-                window.location.reload();
-                dispatch(clearAuth());
-                dispatch(setLoading(false));
+                let base_url = window.location.origin + '/dashboard';
+                return window.location.href = base_url;
             })
             .catch((err) => {
                 dispatch(setLoading(false));
