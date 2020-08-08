@@ -7,12 +7,10 @@ function Home() {
                 <div className="row">
                     <div className="col-md-4 offset-4">
                        <div className="card card-body">
-                       <h4 className="text-center">COVID 19 Pass</h4>
+                       <h4 className="text-center">Quiz App</h4>
 
                        
-                            <a href="/signin" className="btn btn-primary btn-lg mb-2">Sign In</a>
-
-                            <a href="/signup" className="btn btn-primary btn-lg mb-2">Sign Up</a>
+         
                        </div>
                     </div>
                 </div>

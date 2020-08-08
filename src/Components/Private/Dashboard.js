@@ -1,48 +1,37 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { MiniSpinner } from '../../Layouts/Spinner';
+import SetupQuiz from './SetupQuiz.modal';
+import { setModal } from '../../Redux/actions/quiz/quiz.actions';
 
-function Dashboard({ auth: { loading } }) {
+function Dashboard({ quiz: { setup_quiz_modal }, setModal }) {
     
     return (
         <Fragment>
             <div className="container">
-               {
-                   loading ? <div className="my-5 py-5"><MiniSpinner/></div>
-                   :
-                   <div className="pass my-2">
-                        <div className="row">
-                            <div className="col-md-6 col-sm-6 col-12 mt-4">
-                                <div className="card">
-                                    <img src="/assets/img/generate-pass.jpeg" className="card-img-top img-fluid" alt="pass"/>
-                                    <div className="card-body">
-                                        <h4>Quarantine Pass</h4>
-                                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi odio eum laudantium quis excepturi quo voluptate nobis id dolorum quaerat. Eius placeat nulla exercitationem ea. Beatae inventore laboriosam tempora ad?</p>
-                                        <button className="btn btn-primary"><i className="fa fa-file"></i> Generate Pass</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-md-6 col-sm-6 col-12 mt-4">
-                                <div className="card">
-                                    <img src="/assets/img/travel-pass.jpeg" className="card-img-top img-fluid" alt="pass"/>
-                                    <div className="card-body">
-                                        <h4>Travel Pass</h4>
-                                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Modi odio eum laudantium quis excepturi quo voluptate nobis id dolorum quaerat. Eius placeat nulla exercitationem ea. Beatae inventore laboriosam tempora ad?</p>
-                                        <button className="btn btn-primary"><i className="fa fa-file"></i> Generate Pass</button>
-                                    </div>
+                <div className="pass my-2">
+                    <div className="row">
+                        <div className="col-md-6 col-sm-6 col-12 mt-4">
+                            <div className="card">
+                                <img src="/assets/img/quiz.jpeg" className="card-img-top img-fluid" alt="quiz"/>
+                                <div className="card-body">
+                                    <h4>Take a Quiz</h4>
+                                    <p>Features: select category, amount of questions, type of Answers</p>
+                                    <button onClick={() => setModal('setup_quiz_modal')} type="button" className="btn btn-primary">Click Here</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-               }
+                </div>
             </div>
+
+            <SetupQuiz show={setup_quiz_modal} onHide={() => setModal('setup_quiz_modal', false)}/>
         </Fragment>
     )
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    quiz: state.quiz
 })
 
-export default connect(mapStateToProps, { })(Dashboard)
+export default connect(mapStateToProps, { setModal })(Dashboard)

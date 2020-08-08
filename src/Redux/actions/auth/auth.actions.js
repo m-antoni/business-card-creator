@@ -20,17 +20,16 @@ export const fetchCountryData = () => async dispatch => {
 }
 
 export const handleSelectCountry = (selectOption) => async dispatch => {
-
     dispatch({ type: HANDLE_SELECT_COUNTRY, payload: selectOption });    
 }
 
-
+// handle sign-in
 export const handleSignIn = e => async (dispatch, getState) => {
     e.preventDefault();
 
     const { sign_in_email, sign_in_password } = getState().auth.input_params;
-
     dispatch(setLoading(true));
+    
     firebase.auth().signInWithEmailAndPassword(sign_in_email, sign_in_password)
         .then(() => {
     
@@ -41,6 +40,7 @@ export const handleSignIn = e => async (dispatch, getState) => {
                 emailVerified: firebase.auth().currentUser.emailVerified,
                 uid: firebase.auth().currentUser.uid,
             }
+
             setUserSession(setUserParam);
             
             let base_url = window.location.origin + '/dashboard';
@@ -54,7 +54,7 @@ export const handleSignIn = e => async (dispatch, getState) => {
         });
 }
 
-
+// handle sign-up
 export const handleSignUp = e => async (dispatch, getState) => {
     e.preventDefault();
 
@@ -71,18 +71,19 @@ export const handleSignUp = e => async (dispatch, getState) => {
         firebase.auth().createUserWithEmailAndPassword(input_params.email, input_params.password)
             .then((res) => {
 
+                // create user data
                 const db = firebase.firestore();
-                // store user data
                 return db.collection('users').doc(res.user.uid).set({
                     name: input_params.name,
+                    age: input_params.age,
+                    country: input_params.country,
                     created_at: firebase.firestore.FieldValue.serverTimestamp(),
                     updated_at: firebase.firestore.FieldValue.serverTimestamp(),
                 })
-
             })
             .then(() => {
 
-                // sign in the user
+                // sign-in user
                 firebase.auth().signInWithEmailAndPassword(input_params.email, input_params.password)
 
                 const setUserParam = {
@@ -100,13 +101,15 @@ export const handleSignUp = e => async (dispatch, getState) => {
             .catch((err) => {
                 dispatch(setLoading(false));
                 dispatch(clearAuth());
-                SwalError('Something went wrong...');
+                // SwalError('Something went wrong... ');
+                SwalError(err);
                 console.log(`Error: ${err}`);
             })
     }
 
 }
 
+// handle sign-out
 export const handleSignOut = () => async dispatch => {
     dispatch(setLoading(true));
     firebase.auth().signOut().then(() => {

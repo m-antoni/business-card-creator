@@ -6,6 +6,7 @@ const initialState = {
     user_data: [],
     loading: false,
     country_data: [],
+    country_default_value: { value: '', label: 'Choose your country' }
 }
 
 const authReducer = (state = initialState, action) => {

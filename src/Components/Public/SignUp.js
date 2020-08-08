@@ -4,7 +4,7 @@ import { MiniSpinner } from '../../Layouts/Spinner';
 import Select from 'react-select'
 import { handleInputOnChange, handleSignUp, handleSelectCountry, fetchCountryData} from '../../Redux/actions/auth/auth.actions';
 
-function SignUp({ auth: { loading, country_data }, handleInputOnChange, handleSelectCountry, fetchCountryData, handleSignUp }) {
+function SignUp({ auth: { loading, country_data, country_default_value }, handleInputOnChange, handleSelectCountry, fetchCountryData, handleSignUp }) {
 
     useEffect(() => {
         fetchCountryData();
@@ -16,13 +16,21 @@ function SignUp({ auth: { loading, country_data }, handleInputOnChange, handleSe
                <div className="mx-auto col-md-6 col-lg-6">
                     <div className="mt-5 card card-body">
                         {/* <div className="text-center"><i className="fa fa-user-circle fa-3x"></i></div> */}
-                        <h4>Sign-Up</h4><hr/>                        {
+                        <h4><i className="fa fa-edit"></i> Sign-Up</h4><hr/>                        {
                             loading ? <div className="my-5"><MiniSpinner/></div>
                             :
                             <form onSubmit={handleSignUp}>
                                 <div className="form-group">
                                     <label htmlFor="">Full Name:</label>
                                     <input onChange={handleInputOnChange} type="text" name="name" className="form-control"/>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="">Age:</label>
+                                    <input onChange={handleInputOnChange} type="number" name="age" className="form-control"/>
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="">Country:</label>
+                                   <Select options={country_data} onChange={handleSelectCountry} value={country_default_value}/>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="">Email:</label>

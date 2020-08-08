@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { MiniSpinner } from '../../Layouts/Spinner';
-import { handleInputOnChange, sendToEmailPassword } from '../../Redux/actions/quarantine_pass/quarantine_pass.actions';
 
-function ForgorPassword({ auth: { loading }, handleInputOnChange, sendToEmailPassword }) {
+function ForgorPassword({ auth: { loading } }) {
 
     return (
         <div className="container">
@@ -17,10 +16,10 @@ function ForgorPassword({ auth: { loading }, handleInputOnChange, sendToEmailPas
                             <form>
                                 <div className="form-group">
                                     <label htmlFor="">Email Address:</label>
-                                    <input onChange={handleInputOnChange} type="email" name="email" className="form-control" required/>
+                                    <input type="email" name="email" className="form-control" required/>
                                 </div>
                                 <div className="form-group mt-4">
-                                    <button onClick={sendToEmailPassword} type="button" class="btn btn-dark btn-block">Send Password</button>
+                                    <button type="button" class="btn btn-dark btn-block">Send Password</button>
                                     <a href="/" class="btn btn-danger btn-block">Go back</a>
                                 </div>
                             </form>
@@ -36,4 +35,4 @@ const mapStateProps = state => ({
     auth: state.auth
 })
 
-export default connect(mapStateProps, { handleInputOnChange, sendToEmailPassword })(ForgorPassword)
+export default connect(mapStateProps, { })(ForgorPassword)
