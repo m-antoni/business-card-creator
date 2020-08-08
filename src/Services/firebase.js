@@ -4,14 +4,14 @@ import 'firebase/auth'
 
   // Your web app's Firebase configuration
   var firebaseConfig = {
-    apiKey: "AIzaSyD2s9G7wwDP2fxZCe-YA86vsedWhQn4Ov8",
-    authDomain: "covid-pass-db.firebaseapp.com",
-    databaseURL: "https://covid-pass-db.firebaseio.com",
-    projectId: "covid-pass-db",
-    storageBucket: "covid-pass-db.appspot.com",
-    messagingSenderId: "206058915608",
-    appId: "1:206058915608:web:903e7f6538547daa3d406d",
-    measurementId: "G-QPFGVH5BEY"
+    apiKey: `${process.env.REACT_APP_API_KEY}`,
+    authDomain: `${process.env.REACT_APP_AUTH_DOMAIN}`,
+    databaseURL: `${process.env.REACT_APP_DATABASE_URL}`,
+    projectId: `${process.env.REACT_APP_PROJECT_ID}`,
+    storageBucket: `${process.env.REACT_APP_STORAGE_BUCKET}`,
+    messagingSenderId: `${process.env.REACT_APP_MESSAGING_SENDER_ID}`,
+    appId: `${process.env.REACT_APP_APP_ID}`,
+    measurementId: `${process.env.REACT_APP_MEASUREMENT_ID}`
   };
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig)
