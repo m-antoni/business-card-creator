@@ -3,17 +3,18 @@ import { MiniSpinner } from '../../Layouts/Spinner';
 import { Modal } from 'react-bootstrap';
 import Select from 'react-select';
 import { connect } from 'react-redux';
-import { fetchCategories, handleSelectTrivia, handleInputOnChange, fetchQuestions, fetchTriviaAPIToken } from '../../Redux/actions/setup_quiz/setup_quiz.actions';
+import { getCategories, handleSelectTrivia, handleInputOnChange, getTriviaAPIToken, getQuestions } from '../../Redux/actions/setup_quiz/setup_quiz.actions';
 
 
-function SetupQuiz ({ setup_quiz: { loading, trivia_categories, trivia_types, trivia_difficulties, params: { amount, category, difficulty, type } }, fetchQuestions, fetchTriviaAPIToken, handleSelectTrivia, handleInputOnChange, fetchCategories, show, onHide}) {
+function SetupQuiz ({ setup_quiz: { loading, trivia_amounts, trivia_categories, trivia_types, trivia_difficulties, params: { amount, category, difficulty, type } }, getQuestions, getTriviaAPIToken, handleSelectTrivia, handleInputOnChange, getCategories, show, onHide}) {
 
     useEffect(() => {
-        fetchCategories();
-        fetchTriviaAPIToken();
+        getCategories();
+        getTriviaAPIToken();
+
         return () => {
-            fetchCategories();
-            fetchTriviaAPIToken();
+            getCategories();
+            getTriviaAPIToken();
         }
     }, [])
 
@@ -26,10 +27,10 @@ function SetupQuiz ({ setup_quiz: { loading, trivia_categories, trivia_types, tr
                 {
                     loading ? <div className="my-5"><MiniSpinner/></div>
                     :
-                    <form onSubmit={fetchQuestions}>
+                    <form onSubmit={getQuestions}>
                         <div className="form-group">
-                            <label htmlFor="sel-questions">Number of Questions</label>
-                            <input onChange={handleInputOnChange} value={amount} name="amount" type="text" id="sel-questions" className="form-control"/>
+                            <label htmlFor="sel-amount">Number of Questions</label>
+                            <Select options={trivia_amounts} onChange={handleSelectTrivia} defaultValue={amount} id="sel-amount"/>
                         </div>
                         <div className="form-group">
                             <label htmlFor="category">Select Category</label>
@@ -59,4 +60,4 @@ const mapStateToProps = state => ({
     setup_quiz: state.setup_quiz,
 })
 
-export default connect(mapStateToProps, { fetchQuestions, fetchTriviaAPIToken, fetchCategories, handleSelectTrivia, handleInputOnChange })(SetupQuiz)
+export default connect(mapStateToProps, { getQuestions, getTriviaAPIToken,getCategories, handleSelectTrivia, handleInputOnChange })(SetupQuiz)

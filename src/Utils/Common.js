@@ -88,11 +88,11 @@ export const getQuestionsFromLocalStorage = () => {
 }
 
 // set trivia api token to local storage
-export const setTriviaAPIToken = token => {
+export const setTriviaTokenToLocalStorage = token => {
    localStorage.setItem('trivia_api:token', token);
 }
 
 // fetch trivia api token from local storage
-export const getTriviaAPIToken = () => {
+export const getTriviaTokenFromLocalStorage = () => {
     return localStorage.getItem('trivia_api:token') || null;
 }

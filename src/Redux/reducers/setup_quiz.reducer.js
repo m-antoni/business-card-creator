@@ -1,15 +1,23 @@
-import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, CLEAR_SETUP_QUIZ, SET_MODAL, FETCH_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA } from '../actions/types';
+import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, CLEAR_SETUP_QUIZ, SET_MODAL, GET_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA } from '../actions/types';
 
 // state
 const initialState = {
     params: {
-        amount: '',
+        amount: { value: '', label: 'Choose Number of Questions' },
         category: { value: '', label: 'Choose Category' },
         difficulty: { value: '', label: 'Choose Difficulty' },
         type: { value: '', label: 'Choose Type' },
     },
     questions_data: [],
     trivia_categories: [],
+    trivia_amounts: [
+        { value: 5, label: 5, name: 'amount' },
+        { value: 10, label: 10, name: 'amount' },
+        { value: 20, label: 20, name: 'amount' },
+        { value: 30, label: 30, name: 'amount' },
+        { value: 40, label: 40, name: 'amount' },
+        { value: 50, label: 50, name: 'amount' },
+    ],
     trivia_difficulties: [
         { value: 'any', label: 'Any Difficulty', name: 'difficulty'},
         { value: 'easy', label: 'Easy', name: 'difficulty' },
@@ -42,7 +50,7 @@ const setupQuizReducer = (state = initialState, action) => {
                 ...state,
                 params: { ...state.params, [action.payload.key]: action.payload.value }
             }
-        case FETCH_TRIVIA_CREDENTIALS:
+        case GET_TRIVIA_CREDENTIALS:
             return {
                 ...state,
                 ...action.payload
@@ -52,7 +60,7 @@ const setupQuizReducer = (state = initialState, action) => {
                 ...state,
                 questions_data: action.payload
             }
-        case SET_MODAL: 
+        case SET_MODAL:
             return {
                 ...state,
                 [action.payload.modal]: action.payload.status
@@ -61,7 +69,7 @@ const setupQuizReducer = (state = initialState, action) => {
             return {
                 ...state,
                 params: {
-                    amount: '',
+                    amount: { value: '', label: 'Choose Number of Questions' },
                     category: { value: '', label: 'Choose Category' },
                     difficulty: { value: '', label: 'Choose Difficulty' },
                     type: { value: '', label: 'Choose Type' },

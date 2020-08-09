@@ -1,6 +1,6 @@
-import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, SET_MODAL, CLEAR_SETUP_QUIZ, FETCH_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA } from '../types';
+import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, SET_MODAL, CLEAR_SETUP_QUIZ, GET_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA } from '../types';
 import firebase from '../../../Services/firebase';
-import { randomArrayShuffle, setQuestionsToLocalStorage, setTriviaAPIToken, getTriviaAPIToken } from '../../../Utils/Common';
+import { randomArrayShuffle, setQuestionsToLocalStorage, setTriviaTokenToLocalStorage, getTriviaTokenFromLocalStorage } from '../../../Utils/Common';
 import { ToastDanger } from '../../../Utils/Toast';
 import { TriviaAPIService } from './_api.quiz';
 
@@ -53,11 +53,11 @@ const createSelectOption = (lists, api_type = '') => {
 }
 
 // fetch all category
-export const fetchCategories = () => async dispatch => {
-    TriviaAPIService.fetchCategories().then(res => {
+export const getCategories = () => async dispatch => {
+    TriviaAPIService.getCategories().then(res => {
        if(res.status == 200)
        {
-           dispatch({ type: FETCH_TRIVIA_CREDENTIALS, payload: { trivia_categories: createSelectOption(res.data.trivia_categories) } });
+           dispatch({ type: GET_TRIVIA_CREDENTIALS, payload: { trivia_categories: createSelectOption(res.data.trivia_categories) } });
        }
     })
     .catch(err => {
@@ -73,14 +73,14 @@ export const setQuestionsData = questions => async dispatch => {
 }
 
 // fetch token
-export const fetchTriviaAPIToken = () => async dispatch => {
+export const getTriviaAPIToken = () => async dispatch => {
 
-    if(!getTriviaAPIToken())
+    if(!getTriviaTokenFromLocalStorage())
     {
-        TriviaAPIService.fetchTriviaAPIToken().then(res => {
+        TriviaAPIService.getTriviaAPIToken().then(res => {
             if(res.data.response_code == 0)
             {
-                setTriviaAPIToken(res.data.token);
+                setTriviaTokenToLocalStorage(res.data.token);
                 console.log(res.data.message);
             }
         })
@@ -91,12 +91,12 @@ export const fetchTriviaAPIToken = () => async dispatch => {
     }
 }
 
-export const resetTriviaAPIToken = () => async dispatch => {
+export const resetTriviaTokenToLocalStorage = () => async dispatch => {
     
     TriviaAPIService.resetTriviaAPIToken().then(res => {
         if(res.data.response_code == 0)
         {
-            setTriviaAPIToken(res.data.token);
+            setTriviaTokenToLocalStorage(res.data.token);
             console.log('Token has been reset')
         }
     })
@@ -108,7 +108,7 @@ export const resetTriviaAPIToken = () => async dispatch => {
 }
 
 // handle fetch questions 
-export const fetchQuestions = e => async (dispatch, getState) => {
+export const getQuestions = e => async (dispatch, getState) => {
     e.preventDefault();
 
     let { params } = getState().setup_quiz;
@@ -123,9 +123,9 @@ export const fetchQuestions = e => async (dispatch, getState) => {
         }
         else
         {
-            // loop through params and format the url params
+            // format url param
             Object.keys(params).map(key => {
-                key == 'amount' ? url_param += (url_param = `${key}=${params[key]}&`) : params[key].value != 'any' && (url_param += `${key}=${params[key].value}&`);
+                params[key].value != 'any' && (url_param += `${key}=${params[key].value}&`);
             })
 
             // remove & at the end of string
@@ -136,10 +136,11 @@ export const fetchQuestions = e => async (dispatch, getState) => {
             // }
 
             // add token
-            url_param += `token=${getTriviaAPIToken()}`;
+            url_param += `token=${getTriviaTokenFromLocalStorage()}`;
 
+            console.log(url_param)
             dispatch(setLoading(true))
-            TriviaAPIService.fetchQuestions(url_param).then(res => {
+            TriviaAPIService.getQuestions(url_param).then(res => {
                 switch (res.data.response_code) {
                     case 1:
                         ToastDanger('The API doesn\'t have enough questions for your query')
@@ -148,6 +149,8 @@ export const fetchQuestions = e => async (dispatch, getState) => {
                         break;
                     case 3:
                         console.log(res.data.response_code)
+                    case 4:
+                         console.log(res.data.response_code)
                     case 0:
                         setQuestionsToLocalStorage(res.data.results);
                         dispatch(clearSetupQuiz());
