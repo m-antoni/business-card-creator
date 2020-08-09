@@ -2,9 +2,9 @@ import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { MiniSpinner } from '../../Layouts/Spinner';
 import SetupQuiz from './SetupQuiz.modal';
-import { setModal } from '../../Redux/actions/quiz/quiz.actions';
+import { setModal } from '../../Redux/actions/setup_quiz/setup_quiz.actions';
 
-function Dashboard({ quiz: { setup_quiz_modal }, setModal }) {
+function Dashboard({ setup_quiz: { setup_quiz_modal }, setModal }) {
     
     return (
         <Fragment>
@@ -31,7 +31,7 @@ function Dashboard({ quiz: { setup_quiz_modal }, setModal }) {
 }
 
 const mapStateToProps = state => ({
-    quiz: state.quiz
+    setup_quiz: state.setup_quiz
 })
 
 export default connect(mapStateToProps, { setModal })(Dashboard)

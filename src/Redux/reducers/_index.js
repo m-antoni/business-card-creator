@@ -7,7 +7,7 @@ import firebase from './../../Services/firebase';
 
 // All reducers
 import authReducer from './auth.reducer';
-import quizReducer from './quiz.reducer';
+import setupQuizReducer from './setup_quiz.reducer';
 
 // persist config 
 const persistConfig = {
@@ -19,7 +19,7 @@ const persistConfig = {
 // combining all reducers
 const rootReducer = combineReducers({
     auth: authReducer,
-    quiz: quizReducer
+    setup_quiz: setupQuizReducer
 });
 
 export default persistReducer(persistConfig, rootReducer);

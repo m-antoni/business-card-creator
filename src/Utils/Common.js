@@ -19,6 +19,7 @@ export const setUserSession = (param) => {
   localStorage.setItem('firebase:uid', param.uid);
 }
   
+
 // display current date
 export const displayDate = () => {
   const today = new Date();
@@ -60,3 +61,38 @@ export const isToday = (date) => {
       date.getMonth() === today.getMonth() &&
       date.getFullYear() === today.getFullYear();
 };
+
+// random shuffle array
+export const randomArrayShuffle = array => {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+  while (0 !== currentIndex) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
+
+// set questions to local storage
+export const setQuestionsToLocalStorage = questions => {
+    localStorage.setItem('questions:data', JSON.stringify(questions));
+}
+
+// get questions from local storage
+export const getQuestionsFromLocalStorage = () => { 
+    let questions = localStorage.getItem('questions:data')
+    if(questions) return JSON.parse(questions)
+    else return null;
+}
+
+// set trivia api token to local storage
+export const setTriviaAPIToken = token => {
+   localStorage.setItem('trivia_api:token', token);
+}
+
+// fetch trivia api token from local storage
+export const getTriviaAPIToken = () => {
+    return localStorage.getItem('trivia_api:token') || null;
+}
