@@ -1,6 +1,6 @@
-import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, SET_MODAL, CLEAR_SETUP_QUIZ, GET_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA } from '../types';
+import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, SET_MODAL, CLEAR_SETUP_QUIZ, GET_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, IS_QUIZ_START } from '../types';
 import firebase from '../../../Services/firebase';
-import { randomArrayShuffle, setQuestionsToLocalStorage, setTriviaTokenToLocalStorage, getTriviaTokenFromLocalStorage } from '../../../Utils/Common';
+import { randomArrayShuffle, setQuestionsToLocalStorage, setTriviaTokenToLocalStorage, getTriviaTokenFromLocalStorage, getQuizStart } from '../../../Utils/Common';
 import { ToastDanger } from '../../../Utils/Toast';
 import { TriviaAPIService } from './_api.quiz';
 
@@ -111,64 +111,65 @@ export const resetTriviaTokenToLocalStorage = () => async dispatch => {
 export const getQuestions = e => async (dispatch, getState) => {
     e.preventDefault();
 
-    let { params } = getState().setup_quiz;
+    let { params } = getState().quiz;
 
     try {
 
         let url_param = '';
 
-        if(params.amount == '' || params.category == '' || params.difficulty == '' || params.type == '')
-        {
-            ToastDanger('Please fill in all the fields.');
-        }
-        else
-        {
-            // format url param
-            Object.keys(params).map(key => {
-                params[key].value != 'any' && (url_param += `${key}=${params[key].value}&`);
-            })
+        // format url param
+        Object.keys(params).map(key => {
+            params[key].value != 'any' && (url_param += `${key}=${params[key].value}&`);
+        })
 
-            // remove & at the end of string
-            // if(url_param.charAt(url_param.length -1) == '&')
-            // {
-            //     let removeLastChar = url_param.substr(0, url_param.length - 1);
-            //     url_param = removeLastChar;
-            // }
+        // remove & at the end of string
+        // if(url_param.charAt(url_param.length -1) == '&')
+        // {
+        //     let removeLastChar = url_param.substr(0, url_param.length - 1);
+        //     url_param = removeLastChar;
+        // }
 
-            // add token
-            url_param += `token=${getTriviaTokenFromLocalStorage()}`;
+        // add token
+        // url_param += `token=${getTriviaTokenFromLocalStorage()}`;
 
-            console.log(url_param)
-            dispatch(setLoading(true))
-            TriviaAPIService.getQuestions(url_param).then(res => {
-                switch (res.data.response_code) {
-                    case 1:
-                        ToastDanger('The API doesn\'t have enough questions for your query')
-                    case 2:
-                        ToastDanger('You place an invalid field, please check your field')
-                        break;
-                    case 3:
-                        console.log(res.data.response_code)
-                    case 4:
-                         console.log(res.data.response_code)
-                    case 0:
-                        setQuestionsToLocalStorage(res.data.results);
-                        dispatch(clearSetupQuiz());
-                    default:
-                        break;
-                }
-                dispatch(setLoading(false))
-            })
-            .catch(err => {
-                dispatch(setLoading(false))
-                ToastDanger('Something went wrong...');
-                console.log(err);
-            })
-        }
+        console.log(url_param)
+        dispatch(setLoading(true))
+        TriviaAPIService.getQuestions(url_param).then(res => {
+            switch (res.data.response_code) {
+                case 1:
+                    ToastDanger('The API doesn\'t have enough questions for your query')
+                case 2:
+                    ToastDanger('You place an invalid field, please check your field')
+                    break;
+                case 3:
+                    console.log(res.data.response_code)
+                case 4:
+                    console.log(res.data.response_code)
+                case 0:
+                    setQuestionsToLocalStorage(res.data.results);
+                    dispatch(clearSetupQuiz());
+                    window.location.href = '/dashboard/quiz-view';
+                default:
+                    break;
+            }
+            dispatch(setLoading(false))
+        })
+        .catch(err => {
+            dispatch(setLoading(false))
+            ToastDanger('Something went wrong...');
+            console.log(err);
+        })
 
     } catch (err) {
         ToastDanger('Something went wrong...');
         dispatch(setLoading(false))
         console.log(err)
     }
+}
+
+// get the quiz start
+export const isStart = () => async dispatch => {
+    let start = getQuizStart();
+
+    dispatch({ type: IS_QUIZ_START, payload: start })
 }

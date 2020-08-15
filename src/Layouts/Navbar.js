@@ -4,7 +4,7 @@ import { handleSignOut } from '../Redux/actions/auth/auth.actions';
 
 function Navbar({ handleSignOut }) {
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
             <div className="container">
                 <a className="navbar-brand" href="/"><i className="fa fa-notes-medical"></i> Quiz App</a>
                 <button className="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">

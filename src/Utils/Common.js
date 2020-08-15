@@ -77,7 +77,22 @@ export const randomArrayShuffle = array => {
 
 // set questions to local storage
 export const setQuestionsToLocalStorage = questions => {
-    localStorage.setItem('questions:data', JSON.stringify(questions));
+
+  questions.map((question, i) => {
+      let incorrect_answers = question.incorrect_answers
+      incorrect_answers.push(question.correct_answer)
+      let combine_answers = randomArrayShuffle(incorrect_answers);
+      
+      question['choices'] = combine_answers;
+  })
+
+  localStorage.setItem('questions:data', JSON.stringify(questions));
+  localStorage.setItem('quiz:start', true);
+}
+
+// get the quiz start
+export const getQuizStart = () => {
+  return JSON.parse(localStorage.getItem('quiz:start')) || localStorage.setItem('quiz:start', false);
 }
 
 // get questions from local storage

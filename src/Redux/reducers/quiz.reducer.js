@@ -1,14 +1,13 @@
-import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, CLEAR_SETUP_QUIZ, SET_MODAL, GET_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA } from '../actions/types';
+import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, CLEAR_SETUP_QUIZ, SET_MODAL, GET_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, IS_QUIZ_START } from '../actions/types';
 
 // state
 const initialState = {
     params: {
-        amount: { value: '', label: 'Choose Number of Questions' },
+        amount: { value: 10, label: 'Choose Number of Questions' },
         category: { value: '', label: 'Choose Category' },
         difficulty: { value: '', label: 'Choose Difficulty' },
-        type: { value: '', label: 'Choose Type' },
+        type: { value: 'multiple', label: 'Choose Type' },
     },
-    questions_data: [],
     trivia_categories: [],
     trivia_amounts: [
         { value: 5, label: 5, name: 'amount' },
@@ -29,11 +28,15 @@ const initialState = {
         { value: 'multiple', label: 'Multiple Choice', name: 'type' },
         { value: 'boolean', label: 'True or False', name: 'type' },
     ],
+    questions_data: [],
+    current_question: [],
+    score: 0,
+    is_start: false,
     loading: false,
     setup_quiz_modal: false
 }
 
-const setupQuizReducer = (state = initialState, action) => {
+const quizReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_LOADING:
             return {
@@ -60,6 +63,11 @@ const setupQuizReducer = (state = initialState, action) => {
                 ...state,
                 questions_data: action.payload
             }
+        case IS_QUIZ_START:
+            return {
+                ...state,
+                is_start: action.payload
+            }
         case SET_MODAL:
             return {
                 ...state,
@@ -81,4 +89,4 @@ const setupQuizReducer = (state = initialState, action) => {
     }
 }
 
-export default setupQuizReducer;
+export default quizReducer;
