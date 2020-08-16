@@ -1,3 +1,6 @@
+import React from 'react';
+import { SwalSuccess } from './SweetAlert';
+
 // return the user data from the session storage
 export const getUser = () => {
     const userStr = localStorage.getItem('firebase:auth');
@@ -76,19 +79,30 @@ export const randomArrayShuffle = array => {
 }
 
 // set questions to local storage
-export const setQuestionsToLocalStorage = questions => {
+export const setQuestionsToLocalStorage = (questions) => {
 
   questions.map((question, i) => {
       let incorrect_answers = question.incorrect_answers
       incorrect_answers.push(question.correct_answer)
       let combine_answers = randomArrayShuffle(incorrect_answers);
       
-      question['choices'] = combine_answers;
+      question['incorrect_answers'] = combine_answers;
   })
 
   localStorage.setItem('questions:data', JSON.stringify(questions));
+  localStorage.setItem('current:question', JSON.stringify(questions[0]));
+  localStorage.setItem('quiz:index', 0);
   localStorage.setItem('quiz:start', true);
 }
+
+// set to another question
+export const setAnotherQuestionToLocalStorage = (index) => {
+    let questions = getQuestionsFromLocalStorage();
+    localStorage.setItem('current:question', JSON.stringify(questions[index]));
+    localStorage.setItem('quiz:index', index);
+}
+
+
 
 // get the quiz start
 export const getQuizStart = () => {
@@ -102,6 +116,11 @@ export const getQuestionsFromLocalStorage = () => {
     else return null;
 }
 
+export const getQuestionIndex = () => {
+    let index = localStorage.getItem('quiz:index');
+    return JSON.parse(index) || null;
+}
+
 // set trivia api token to local storage
 export const setTriviaTokenToLocalStorage = token => {
    localStorage.setItem('trivia_api:token', token);
@@ -111,3 +130,13 @@ export const setTriviaTokenToLocalStorage = token => {
 export const getTriviaTokenFromLocalStorage = () => {
     return localStorage.getItem('trivia_api:token') || null;
 }
+
+// get current question
+export const getCurrentQuestionFromLocalStorage = () => {
+  let current = localStorage.getItem('current:question');
+  if(current) return JSON.parse(current)
+  else return null;
+}
+
+// decode string with HTML entities
+export const renderHTML = (rawHTML) => React.createElement("div", { dangerouslySetInnerHTML: { __html: rawHTML } });

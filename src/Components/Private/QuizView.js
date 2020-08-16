@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { MDBContainer, MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol, MDBInput, MDBCardText, MDBCardFooter } from 'mdbreact';
-import { getQuestions,  isStart} from '../../Redux/actions/quiz/quiz.actions';
+import { getQuestions,  getCurrentQuestion, handleOnChangeRadio, handleSubmitAnswer} from '../../Redux/actions/quiz/quiz.actions';
+import Interweave, { Markup } from 'interweave';
+import { renderHTML } from '../../Utils/Common';
 
-function QuizView({ quiz: { is_start, score }, isStart}) {
+function QuizView({ quiz: { start, score, current_question, question_index, questions_data }, getCurrentQuestion, handleOnChangeRadio, handleSubmitAnswer}) {
 
-  
+    useEffect(() => {
+        getCurrentQuestion();
+    },[])
+
     return (
         <MDBContainer>
             <MDBRow center={true}>
-                <MDBCol md="6">
+                <MDBCol md="8">
                     <MDBRow center={true}>
                         <MDBCol size="12">
                             <h4 className="float-right text-success"> Score: {score}</h4> 
@@ -18,26 +23,19 @@ function QuizView({ quiz: { is_start, score }, isStart}) {
                     </MDBRow>
                     <MDBCard>
                         <MDBCardBody>
-                            <p className="mb-4">Lorem ipsum, dolor sit amet consectetur adipisicing elro?</p>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" />
-                                <label class="form-check-label" for="exampleRadios1"> Default radio</label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2" />
-                                <label class="form-check-label" for="exampleRadios2"> Second default radio</label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option2" />
-                                <label class="form-check-label" for="exampleRadios3"> Second default radio</label>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option2" />
-                                <label class="form-check-label" for="exampleRadios4"> Second default radio</label>
-                            </div>
+                        <MDBCardTitle>Question No: {question_index + 1}/{questions_data.length}</MDBCardTitle>
+                        <p className="mb-3">{renderHTML(current_question.question)}</p>
+                        {
+                           current_question.incorrect_answers && current_question.incorrect_answers.map((choice, i) => (
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" onChange={handleOnChangeRadio} type="radio" name="exampleRadios" id={i} value={choice} />
+                                    <label class="form-check-label" for={i}>{choice}</label>
+                                </div>
+                            ))
+                        }
                         </MDBCardBody>
                         <MDBCardFooter>
-                            <MDBBtn color="blue">Submit Answer</MDBBtn>
+                            <MDBBtn color="blue" onClick={handleSubmitAnswer}>Submit Answer</MDBBtn>
                             <MDBBtn color="danger">QUIT</MDBBtn>
                         </MDBCardFooter>
                     </MDBCard>    
@@ -51,4 +49,4 @@ const mapStateToProps = state => ({
     quiz: state.quiz
 })
 
-export default connect(mapStateToProps, { isStart })(QuizView)
+export default connect(mapStateToProps, { getCurrentQuestion, handleOnChangeRadio, handleSubmitAnswer })(QuizView)

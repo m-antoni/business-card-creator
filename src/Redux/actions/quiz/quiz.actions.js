@@ -1,7 +1,8 @@
-import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, SET_MODAL, CLEAR_SETUP_QUIZ, GET_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, IS_QUIZ_START } from '../types';
+import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, SET_MODAL, CLEAR_SETUP_QUIZ, GET_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, GET_CURRENT_QUESTION, HANDLE_ONCHANGE_RADIO, INCREMENT_SCORE } from '../types';
 import firebase from '../../../Services/firebase';
-import { randomArrayShuffle, setQuestionsToLocalStorage, setTriviaTokenToLocalStorage, getTriviaTokenFromLocalStorage, getQuizStart } from '../../../Utils/Common';
+import { randomArrayShuffle, setQuestionsToLocalStorage, setTriviaTokenToLocalStorage, getTriviaTokenFromLocalStorage, getQuizStart, getCurrentQuestionFromLocalStorage, getQuestionIndex, setAnotherQuestionToLocalStorage, getQuestionsFromLocalStorage } from '../../../Utils/Common';
 import { ToastDanger } from '../../../Utils/Toast';
+import { SwalSuccess } from '../../../Utils/SweetAlert';
 import { TriviaAPIService } from './_api.quiz';
 
 
@@ -123,11 +124,11 @@ export const getQuestions = e => async (dispatch, getState) => {
         })
 
         // remove & at the end of string
-        // if(url_param.charAt(url_param.length -1) == '&')
-        // {
-        //     let removeLastChar = url_param.substr(0, url_param.length - 1);
-        //     url_param = removeLastChar;
-        // }
+        if(url_param.charAt(url_param.length -1) == '&')
+        {
+            let removeLastChar = url_param.substr(0, url_param.length - 1);
+            url_param = removeLastChar;
+        }
 
         // add token
         // url_param += `token=${getTriviaTokenFromLocalStorage()}`;
@@ -168,8 +169,41 @@ export const getQuestions = e => async (dispatch, getState) => {
 }
 
 // get the quiz start
-export const isStart = () => async dispatch => {
+export const getCurrentQuestion = () => async dispatch => {
     let start = getQuizStart();
+    let questions_data = getQuestionsFromLocalStorage();
+    let current_question = getCurrentQuestionFromLocalStorage();
+    let question_index = getQuestionIndex();
 
-    dispatch({ type: IS_QUIZ_START, payload: start })
+    console.log(questions_data.length)
+
+    dispatch({ type: GET_CURRENT_QUESTION, payload: { start: start, current_question: current_question, correct_answer: current_question.correct_answer, question_index: question_index, questions_data: questions_data } })
+}
+
+// handle on change answer
+export const handleOnChangeRadio = e => async dispatch => {
+    // console.log(e.target.value);
+    dispatch({ type: HANDLE_ONCHANGE_RADIO, payload: e.target.value });
+} 
+
+// handle submit answer
+export const handleSubmitAnswer = () => async (dispatch, getState) => {
+
+    let { correct_answer, question_index, chosen_answer, questions_data, score} = getState().quiz;
+
+    if(correct_answer == chosen_answer)
+    {
+        dispatch({ type: INCREMENT_SCORE });
+    }
+
+    if(questions_data.length == question_index)
+    {
+        SwalSuccess(`Congratulation You've Finished the questions, Total Score: ${score}`)
+    }
+    else
+    {
+        setAnotherQuestionToLocalStorage(question_index + 1);
+        dispatch(getCurrentQuestion());
+    }
+    
 }
