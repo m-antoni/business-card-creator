@@ -10,7 +10,7 @@ export const ToastSuccess = message =>
         iconColor: "rgb(0, 255, 184)",
         theme: "dark",
         progressBarColor: "rgb(0, 255, 184)",
-        position: "bottomRight",
+        position: "topCenter",
         transitionIn: "bounceInLeft",
         transitionOut: "fadeOut",
         timeout: 4000

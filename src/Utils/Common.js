@@ -92,21 +92,36 @@ export const setQuestionsToLocalStorage = (questions) => {
   localStorage.setItem('questions:data', JSON.stringify(questions));
   localStorage.setItem('current:question', JSON.stringify(questions[0]));
   localStorage.setItem('quiz:index', 0);
-  localStorage.setItem('quiz:start', true);
+  setScore(0);
+  setQuizStart(true)
 }
 
 // set to another question
 export const setAnotherQuestionToLocalStorage = (index) => {
     let questions = getQuestionsFromLocalStorage();
-    localStorage.setItem('current:question', JSON.stringify(questions[index]));
+
+    if (questions.length == index)
+    {
+      localStorage.setItem('current:question', []);
+      setQuizStart(false);
+    }
+    else
+    {
+      localStorage.setItem('current:question', JSON.stringify(questions[index]));
+    }
+    
     localStorage.setItem('quiz:index', index);
 }
-
 
 
 // get the quiz start
 export const getQuizStart = () => {
   return JSON.parse(localStorage.getItem('quiz:start')) || localStorage.setItem('quiz:start', false);
+}
+
+// set start
+export const setQuizStart = status => {
+  localStorage.setItem('quiz:start', status);
 }
 
 // get questions from local storage
@@ -133,9 +148,19 @@ export const getTriviaTokenFromLocalStorage = () => {
 
 // get current question
 export const getCurrentQuestionFromLocalStorage = () => {
-  let current = localStorage.getItem('current:question');
-  if(current) return JSON.parse(current)
+  let current =localStorage.getItem('current:question');
+  if(current) return  JSON.parse(current);
   else return null;
+}
+
+// set score
+export const setScore = score => {
+    localStorage.setItem('quiz:score', score);
+}
+
+// get score
+export const getScore = () => {
+  return JSON.parse(localStorage.getItem('quiz:score')) || 0;
 }
 
 // decode string with HTML entities

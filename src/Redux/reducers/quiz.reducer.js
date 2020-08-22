@@ -1,7 +1,8 @@
-import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, CLEAR_SETUP_QUIZ, SET_MODAL, GET_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, GET_CURRENT_QUESTION, HANDLE_ONCHANGE_RADIO, INCREMENT_SCORE } from '../actions/types';
-import { actionTypes } from 'react-redux-firebase';
+import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, CLEAR_SETUP_QUIZ, SET_MODAL, 
+    GET_TRIVIA_CREDENTIALS,  HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, 
+    GET_CURRENT_QUESTION, HANDLE_ONCHANGE_RADIO } from '../actions/types';
 
-// state
+
 const initialState = {
     params: {
         amount: { value: 10, label: 'Choose Number of Questions' },
@@ -38,7 +39,7 @@ const initialState = {
     start: false,
     score: 0,
     loading: false,
-    setup_quiz_modal: false
+    setup_quiz_modal: false,
 }
 
 const quizReducer = (state = initialState, action) => {
@@ -71,21 +72,17 @@ const quizReducer = (state = initialState, action) => {
         case GET_CURRENT_QUESTION:
             return {
                 ...state,
-                start: action.payload.start,
                 questions_data: action.payload.questions_data,
                 current_question: action.payload.current_question,
                 correct_answer: action.payload.correct_answer,
-                question_index: action.payload.question_index
+                question_index: action.payload.question_index,
+                score: action.payload.score,
+                chosen_answer: ''
             }
         case HANDLE_ONCHANGE_RADIO:
             return {
                 ...state,
                 chosen_answer: action.payload
-            }
-        case INCREMENT_SCORE: 
-            return {
-                ...state,
-                score: state.score + 1
             }
         case SET_MODAL:
             return {

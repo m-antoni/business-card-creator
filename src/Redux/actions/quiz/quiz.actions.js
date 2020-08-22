@@ -1,7 +1,9 @@
-import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, SET_MODAL, CLEAR_SETUP_QUIZ, GET_TRIVIA_CREDENTIALS, HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, GET_CURRENT_QUESTION, HANDLE_ONCHANGE_RADIO, INCREMENT_SCORE } from '../types';
+import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, SET_MODAL, CLEAR_SETUP_QUIZ, GET_TRIVIA_CREDENTIALS, 
+    HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, GET_CURRENT_QUESTION, HANDLE_ONCHANGE_RADIO, INCREMENT_SCORE } from '../types';
 import firebase from '../../../Services/firebase';
-import { randomArrayShuffle, setQuestionsToLocalStorage, setTriviaTokenToLocalStorage, getTriviaTokenFromLocalStorage, getQuizStart, getCurrentQuestionFromLocalStorage, getQuestionIndex, setAnotherQuestionToLocalStorage, getQuestionsFromLocalStorage } from '../../../Utils/Common';
-import { ToastDanger } from '../../../Utils/Toast';
+import $ from 'jquery';
+import { randomArrayShuffle, setQuestionsToLocalStorage, setTriviaTokenToLocalStorage, getTriviaTokenFromLocalStorage, getQuizStart, getCurrentQuestionFromLocalStorage, getQuestionIndex, setAnotherQuestionToLocalStorage, getQuestionsFromLocalStorage, setQuizStart, setScore, getScore } from '../../../Utils/Common';
+import { ToastDanger, ToastSuccess } from '../../../Utils/Toast';
 import { SwalSuccess } from '../../../Utils/SweetAlert';
 import { TriviaAPIService } from './_api.quiz';
 
@@ -170,14 +172,39 @@ export const getQuestions = e => async (dispatch, getState) => {
 
 // get the quiz start
 export const getCurrentQuestion = () => async dispatch => {
-    let start = getQuizStart();
     let questions_data = getQuestionsFromLocalStorage();
     let current_question = getCurrentQuestionFromLocalStorage();
     let question_index = getQuestionIndex();
+    let score = getScore();
 
-    console.log(questions_data.length)
+    try {
 
-    dispatch({ type: GET_CURRENT_QUESTION, payload: { start: start, current_question: current_question, correct_answer: current_question.correct_answer, question_index: question_index, questions_data: questions_data } })
+        if(questions_data.length == question_index)
+        {
+            if(score == questions_data.length)
+            {
+                SwalSuccess(`Congratulations You've got a Perfect Score <br/> Score: ${score}`)
+            }
+            else
+            {
+                SwalSuccess(`Congratulations Your Score: ${score}`);
+            }
+        }
+
+        let params = {
+            current_question: current_question,
+            correct_answer: current_question ? current_question.correct_answer : [], 
+            question_index: question_index, 
+            questions_data: questions_data,
+            score: score,
+        }
+        
+        dispatch({ type: GET_CURRENT_QUESTION,payload: params });
+
+    } catch (err) {
+        console.log(`Error: ${err}`);
+        ToastDanger('')
+    }
 }
 
 // handle on change answer
@@ -189,21 +216,31 @@ export const handleOnChangeRadio = e => async dispatch => {
 // handle submit answer
 export const handleSubmitAnswer = () => async (dispatch, getState) => {
 
-    let { correct_answer, question_index, chosen_answer, questions_data, score} = getState().quiz;
+    let { correct_answer, question_index, chosen_answer} = getState().quiz;
 
-    if(correct_answer == chosen_answer)
-    {
-        dispatch({ type: INCREMENT_SCORE });
-    }
+    try {
+        
+        if(chosen_answer == '') return ToastDanger('Please Choose your Answer.');
 
-    if(questions_data.length == question_index)
-    {
-        SwalSuccess(`Congratulation You've Finished the questions, Total Score: ${score}`)
-    }
-    else
-    {
+        if(correct_answer == chosen_answer)
+        {
+            setScore(getScore() + 1);
+        }
+        
         setAnotherQuestionToLocalStorage(question_index + 1);
         dispatch(getCurrentQuestion());
+    } catch (err) {
+        console.log(`Error: ${err}`)
     }
-    
+
+    $('input[name="radio-answer"]').prop('checked', false);
 }
+
+// // show the score
+// export const showScore = () => async (dispatch, getState) => {
+    
+//     let { question_index, questions_data } = getState().quiz;
+
+    
+    
+// }
