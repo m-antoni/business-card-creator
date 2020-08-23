@@ -18,4 +18,4 @@ import 'firebase/auth'
   firebase.firestore().settings({ timestampsInSnapshots: true })
 //   firebase.analytics();
 
-export default firebase
+export default firebase;

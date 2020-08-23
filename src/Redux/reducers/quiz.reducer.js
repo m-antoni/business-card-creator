@@ -1,6 +1,6 @@
 import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, CLEAR_SETUP_QUIZ, SET_MODAL, 
     GET_TRIVIA_CREDENTIALS,  HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, 
-    GET_CURRENT_QUESTION, HANDLE_ONCHANGE_RADIO } from '../actions/types';
+    GET_CURRENT_QUESTION, HANDLE_ONCHANGE_RADIO, GET_QUIZ_RESULTS } from '../actions/types';
 
 
 const initialState = {
@@ -30,6 +30,7 @@ const initialState = {
         { value: 'multiple', label: 'Multiple Choice', name: 'type' },
         { value: 'boolean', label: 'True or False', name: 'type' },
     ],
+    quiz_results: [],
     questions_data: [],
     current_question: [],
     question_index: 0,
@@ -83,6 +84,11 @@ const quizReducer = (state = initialState, action) => {
             return {
                 ...state,
                 chosen_answer: action.payload
+            }
+        case GET_QUIZ_RESULTS:
+            return {
+                ...state,
+                quiz_results: action.payload
             }
         case SET_MODAL:
             return {

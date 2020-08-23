@@ -1,11 +1,12 @@
 import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, SET_MODAL, CLEAR_SETUP_QUIZ, GET_TRIVIA_CREDENTIALS, 
-    HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, GET_CURRENT_QUESTION, HANDLE_ONCHANGE_RADIO, INCREMENT_SCORE } from '../types';
+    HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, GET_CURRENT_QUESTION, HANDLE_ONCHANGE_RADIO, INCREMENT_SCORE, GET_QUIZ_RESULTS } from '../types';
 import firebase from '../../../Services/firebase';
 import $ from 'jquery';
-import { randomArrayShuffle, setQuestionsToLocalStorage, setTriviaTokenToLocalStorage, getTriviaTokenFromLocalStorage, getQuizStart, getCurrentQuestionFromLocalStorage, getQuestionIndex, setAnotherQuestionToLocalStorage, getQuestionsFromLocalStorage, setQuizStart, setScore, getScore } from '../../../Utils/Common';
+import { randomArrayShuffle, setQuestionsToLocalStorage, setTriviaTokenToLocalStorage, getTriviaTokenFromLocalStorage, getCurrentQuestionFromLocalStorage, getQuestionIndex, setAnotherQuestionToLocalStorage, getQuestionsFromLocalStorage, setScore, getScore, getUID } from '../../../Utils/Common';
 import { ToastDanger, ToastSuccess } from '../../../Utils/Toast';
 import { SwalSuccess } from '../../../Utils/SweetAlert';
 import { TriviaAPIService } from './_api.quiz';
+import Swal from 'sweetalert2';
 
 
 // set loading
@@ -181,14 +182,7 @@ export const getCurrentQuestion = () => async dispatch => {
 
         if(questions_data.length == question_index)
         {
-            if(score == questions_data.length)
-            {
-                SwalSuccess(`Congratulations You've got a Perfect Score <br/> Score: ${score}`)
-            }
-            else
-            {
-                SwalSuccess(`Congratulations Your Score: ${score}`);
-            }
+           dispatch(saveQuizData())
         }
 
         let params = {
@@ -236,11 +230,66 @@ export const handleSubmitAnswer = () => async (dispatch, getState) => {
     $('input[name="radio-answer"]').prop('checked', false);
 }
 
-// // show the score
-// export const showScore = () => async (dispatch, getState) => {
+// store the data to firestore
+export const saveQuizData = () => async (dispatch, getState) => {
     
-//     let { question_index, questions_data } = getState().quiz;
+    let { score } = getState().quiz;
+    let uid = getUID();
 
+    const db = firebase.firestore();
+
+    return db.collection('quizzes').add({
+        uid: uid,
+        score: score,
+        created_at: new Date(),
+        updated_at: new Date()
+    })
+    .then(res => {
+
+        try {
+
+            const docRef = db.collection('quizzes').doc(res.id);
+
+            docRef.get().then(doc => {
+
+                let score = doc.data().score
+                if(score == 0)
+                {
+                    ToastSuccess(`Sorry you only got Score ${score}`)
+                }
+                else
+                {
+                    // ToastSuccess(`Congratulations your Score: ${score}`);
+                    SwalSuccess(`Congratulations your score: ${score}`)
+                }
+            })
     
+        } catch (error) {
+            console.log(`Error: ${error}`)
+        }
+    }).catch((err) => {
+        console.log(`Error: ${err}`);
+        ToastDanger('Something went wrong...');
+    })
     
-// }
+}
+
+
+// fetch all the quiz score
+export const getAllQuiz = () => async dispatch => {
+    
+    const db = firebase.firestore();
+
+    db.collection('quizzes').orderBy('created_at', 'desc').get()
+    .then(snapshot => {
+        let quiz_results = [];
+        snapshot.docs.map(doc => quiz_results.push(doc.data()));
+        
+        dispatch({ type: GET_QUIZ_RESULTS, payload: quiz_results });
+    })
+    .catch(err => {
+        console.log(`Error: ${err}`);
+        ToastDanger('Something went wrong...');
+    })
+    
+}

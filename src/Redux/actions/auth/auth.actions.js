@@ -77,8 +77,8 @@ export const handleSignUp = e => async (dispatch, getState) => {
                     name: input_params.name,
                     age: input_params.age,
                     country: input_params.country,
-                    created_at: firebase.firestore.FieldValue.serverTimestamp(),
-                    updated_at: firebase.firestore.FieldValue.serverTimestamp(),
+                    created_at: new Date(),
+                    updated_at: new Date(),
                 })
             })
             .then(() => {
