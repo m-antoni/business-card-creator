@@ -280,7 +280,7 @@ export const getAllQuiz = () => async dispatch => {
     
     const db = firebase.firestore();
 
-    db.collection('quizzes').orderBy('created_at', 'desc').get()
+    db.collection('quizzes').orderBy('created_at', 'desc').limit(4).get()
     .then(snapshot => {
         let quiz_results = [];
         snapshot.docs.map(doc => quiz_results.push(doc.data()));

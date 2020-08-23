@@ -37,7 +37,7 @@ function SetupQuiz ({ quiz: { loading, trivia_amounts, trivia_categories, trivia
                         </div> */}
                     
                         <div className="form-group mt-2">
-                            <MDBBtn type="submit" className="btn btn-primary btn-block">Setup Quiz</MDBBtn>
+                            <MDBBtn type="submit" className="btn btn-primary btn-block">Submit Now</MDBBtn>
                             {/* <button type="button" onClick={onHide} className="btn btn-danger btn-block">Cancel</button> */}
                         </div>
                     </form>

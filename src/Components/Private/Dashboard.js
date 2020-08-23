@@ -24,20 +24,27 @@ function Dashboard({ quiz: { setup_quiz_modal, quiz_results }, setModal, getCate
                             <MDBCardBody>
                             <MDBCardTitle>Take A Quiz</MDBCardTitle>
                             <MDBCardText>Click below to chose your category.</MDBCardText>
-                            <MDBBtn onClick={() => setModal('setup_quiz_modal')} href="#">Click</MDBBtn>
+                            <MDBBtn onClick={() => setModal('setup_quiz_modal')} href="#">Start Now</MDBBtn>
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>
-                    <MDBCol md="6">
+                    <MDBCol md="2"></MDBCol>
+                    <MDBCol md="4">
                         <MDBCard>
                             <MDBCardBody>
                                 <MDBCardTitle>Your Records</MDBCardTitle>
                                 {
                                     quiz_results.length == 0 ? <MiniSpinner/>
                                     :
-                                    quiz_results && quiz_results.map(data => (
-                                        <div><strong>Score:</strong> {data.score} <span className="float-right"><MDBCardText>{moment(data.created_at.toDate()).format('M-D-Y h:mm A')}</MDBCardText></span><hr/></div>
-                                    )) 
+                                    <Fragment>
+                                        {
+                                            quiz_results && quiz_results.map(data => (
+                                                <div><strong>Score:</strong> {data.score} <span className="float-right"><MDBCardText>{moment(data.created_at.toDate()).format('M-D-Y h:mm A')}</MDBCardText></span><hr/></div>
+                                            )) 
+                                        }
+                                        <a href="#" className="btn-block text-center">VIEW ALL RESULT</a>
+                                    </Fragment>
+
                                 }
                             </MDBCardBody>
                         </MDBCard>
