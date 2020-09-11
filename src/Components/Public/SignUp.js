@@ -45,8 +45,8 @@ function SignUp({ auth: { loading, country_data, country_default_value }, handle
                                     <input onChange={handleInputOnChange} type="password" name="confirm_password" className="form-control"/>
                                 </div>
                                 <div className="form-group mt-4">
-                                    <button type="submit" class="btn btn-dark btn-block">Sign Up</button>
-                                    <a href="/" class="btn btn-danger btn-block">Go back</a>
+                                    <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                                    <a href="/" className="btn btn-block">Go back</a>
                                 </div>
                             </form>
                         }

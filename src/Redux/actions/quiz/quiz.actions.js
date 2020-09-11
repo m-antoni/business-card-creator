@@ -1,5 +1,4 @@
-import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, SET_MODAL, CLEAR_SETUP_QUIZ, GET_TRIVIA_CREDENTIALS, 
-    HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, GET_CURRENT_QUESTION, HANDLE_ONCHANGE_RADIO, INCREMENT_SCORE, GET_QUIZ_RESULTS } from '../types';
+import * as TYPE from '../types';
 import firebase from '../../../Services/firebase';
 import $ from 'jquery';
 import { randomArrayShuffle, setQuestionsToLocalStorage, setTriviaTokenToLocalStorage, getTriviaTokenFromLocalStorage, getCurrentQuestionFromLocalStorage, getQuestionIndex, setAnotherQuestionToLocalStorage, getQuestionsFromLocalStorage, setScore, getScore, getUID } from '../../../Utils/Common';
@@ -8,22 +7,21 @@ import { SwalSuccess } from '../../../Utils/SweetAlert';
 import { TriviaAPIService } from './_api.quiz';
 import Swal from 'sweetalert2';
 
-
 // set loading
-export const setLoading = (status) => async dispatch => dispatch({ type: SET_LOADING, payload: status });
+export const setLoading = (status) => async dispatch => dispatch({ type: TYPE.SET_LOADING, payload: status });
 
 // handle input
-export const handleInputOnChange = e => async dispatch => dispatch({ type: HANDLE_SETUP_QUIZ_INPUT, payload: { key: e.target.name, value: e.target.value } });
+export const handleInputOnChange = e => async dispatch => dispatch({ type: TYPE.HANDLE_SETUP_QUIZ_INPUT, payload: { key: e.target.name, value: e.target.value } });
 
 // clear fields
-export const clearSetupQuiz = () => async dispatch => dispatch({ type: CLEAR_SETUP_QUIZ });
+export const clearSetupQuiz = () => async dispatch => dispatch({ type: TYPE.CLEAR_SETUP_QUIZ });
 
 // set modal
 export const setModal = (modal, status = true) => async dispatch => {
 
     if(status)
     {
-        dispatch({ type: SET_MODAL, payload: { modal, status } });   
+        dispatch({ type: TYPE.SET_MODAL, payload: { modal, status } });   
     }
     else
     {
@@ -37,7 +35,7 @@ export const handleSelectTrivia = (selectOption) => async dispatch => {
 
     let selected_param = { key: [selectOption.name], value: { value: selectOption.value, label: selectOption.label } };
 
-    dispatch({ type: HANDLE_SETUP_QUIZ_SELECT, payload: selected_param });
+    dispatch({ type: TYPE.HANDLE_SETUP_QUIZ_SELECT, payload: selected_param });
 }
 
 
@@ -61,7 +59,7 @@ export const getCategories = () => async dispatch => {
     TriviaAPIService.getCategories().then(res => {
        if(res.status == 200)
        {
-           dispatch({ type: GET_TRIVIA_CREDENTIALS, payload: { trivia_categories: createSelectOption(res.data.trivia_categories) } });
+           dispatch({ type: TYPE.GET_TRIVIA_CREDENTIALS, payload: { trivia_categories: createSelectOption(res.data.trivia_categories) } });
        }
     })
     .catch(err => {
@@ -73,7 +71,7 @@ export const getCategories = () => async dispatch => {
 // set questions
 export const setQuestionsData = questions => async dispatch => {
     setQuestionsToLocalStorage(questions);
-    dispatch({ type: SET_QUESTIONS_DATA, payload: questions });
+    dispatch({ type: TYPE.SET_QUESTIONS_DATA, payload: questions });
 }
 
 // fetch token
@@ -193,7 +191,7 @@ export const getCurrentQuestion = () => async dispatch => {
             score: score,
         }
         
-        dispatch({ type: GET_CURRENT_QUESTION,payload: params });
+        dispatch({ type: TYPE.GET_CURRENT_QUESTION,payload: params });
 
     } catch (err) {
         console.log(`Error: ${err}`);
@@ -204,7 +202,7 @@ export const getCurrentQuestion = () => async dispatch => {
 // handle on change answer
 export const handleOnChangeRadio = e => async dispatch => {
     // console.log(e.target.value);
-    dispatch({ type: HANDLE_ONCHANGE_RADIO, payload: e.target.value });
+    dispatch({ type: TYPE.HANDLE_ONCHANGE_RADIO, payload: e.target.value });
 } 
 
 // handle submit answer
@@ -285,7 +283,7 @@ export const getAllQuiz = () => async dispatch => {
         let quiz_results = [];
         snapshot.docs.map(doc => quiz_results.push(doc.data()));
         
-        dispatch({ type: GET_QUIZ_RESULTS, payload: quiz_results });
+        dispatch({ type: TYPE.GET_QUIZ_RESULTS, payload: quiz_results });
     })
     .catch(err => {
         console.log(`Error: ${err}`);

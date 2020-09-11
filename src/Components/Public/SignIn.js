@@ -29,8 +29,8 @@ function SignIn({ auth: { loading }, handleInputOnChange, handleSignIn }) {
                                     <a href="/forgot-password" className="text-danger">Forgot Password ?</a>
                                 </div>
                                 <div className="form-group mt-4">
-                                    <button type="submit" class="btn btn-dark btn-block">Sign In</button>
-                                    <a href="/signup" class="btn btn-danger btn-block">Sign Up</a>
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block">Sign In</button>
+                                    <div>Don't have an account? <a href="/signup" class="">Go Sign up</a></div>
                                 </div>
                             </form>
                         }

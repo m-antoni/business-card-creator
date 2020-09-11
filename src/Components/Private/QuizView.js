@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { MDBContainer, MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBRow, MDBCol, MDBInput, MDBCardText, MDBCardFooter } from 'mdbreact';
@@ -9,27 +9,46 @@ import { Spinner } from 'react-bootstrap';
 
 function QuizView({ quiz: { score, current_question, question_index, questions_data, loading }, getCurrentQuestion, handleOnChangeRadio, handleSubmitAnswer}) {
 
+    const [counter, setCounter] = useState(60);
+
     useEffect(() => {
         getCurrentQuestion();
-    },[])
+        const value = counter <= 10 ? `0${counter - 1}` : counter - 1;
+        const timer = counter > 0 && setInterval(() => setCounter(value), 1000); 
+        return () => clearInterval(timer);
+    },[counter])
 
     if(!getQuizStart())
     {
         return <Redirect to='/dashboard'/>
     }
 
+
     return (
-        <MDBContainer>
-            <MDBRow center={true}>
-                <MDBCol md="8">
-                    <MDBRow center={true}>
-                        <MDBCol size="12">
-                            <h4 className="float-right text-success"> Score: {score}</h4> 
-                        </MDBCol>
-                    </MDBRow>
-                    <MDBCard>
-                        <MDBCardBody>
-                        <MDBCardTitle>Question No: {question_index + 1}/{questions_data.length}</MDBCardTitle>
+        <div className="container">
+            <div className="row">
+                <div className="col-4 text-center">
+                    <div className="card card-body">
+                        <div>Quiz</div>
+                        <h4>{question_index + 1}/{questions_data.length}</h4>
+                    </div>
+                </div>
+                <div className="col-4 text-center">
+                    <div className="card card-body">
+                        <div>Timer</div>
+                        <h4 className="text-danger"><strong>{counter}</strong></h4>
+                    </div>
+                </div>
+                <div className="col-4 text-center">
+                    <div className="card card-body">
+                        <div>Score</div>
+                        <h4> {score}</h4>
+                    </div>
+                </div>
+
+                <div className="col-12">
+                    <div className="card mt-3">
+                        <div className="card-body">
                             {
                                 loading ? <Spinner/>
                                 :
@@ -45,15 +64,12 @@ function QuizView({ quiz: { score, current_question, question_index, questions_d
                                     }
                                 </Fragment>
                             }
-                        </MDBCardBody>
-                        <MDBCardFooter>
-                            <MDBBtn color="blue" onClick={handleSubmitAnswer}>Submit Answer</MDBBtn>
-                            <MDBBtn color="danger">QUIT</MDBBtn>
-                        </MDBCardFooter>
-                    </MDBCard>    
-                </MDBCol>
-            </MDBRow>
-        </MDBContainer>
+                        </div>
+                        {/* <button onClick={handleSubmitAnswer} className="btn btn-primary">Submit</button> */}
+                    </div> 
+                </div>
+            </div>
+        </div>
     )
 }
 

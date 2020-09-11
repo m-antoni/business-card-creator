@@ -1,6 +1,4 @@
-import { SET_LOADING, HANDLE_SETUP_QUIZ_INPUT, CLEAR_SETUP_QUIZ, SET_MODAL, 
-    GET_TRIVIA_CREDENTIALS,  HANDLE_SETUP_QUIZ_SELECT, SET_QUESTIONS_DATA, 
-    GET_CURRENT_QUESTION, HANDLE_ONCHANGE_RADIO, GET_QUIZ_RESULTS } from '../actions/types';
+import * as TYPE from '../actions/types';
 
 
 const initialState = {
@@ -45,32 +43,32 @@ const initialState = {
 
 const quizReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_LOADING:
+        case TYPE.SET_LOADING:
             return {
                 ...state,
                 loading: action.payload
             }
-        case HANDLE_SETUP_QUIZ_INPUT:
+        case TYPE.HANDLE_SETUP_QUIZ_INPUT:
             return {
                 ...state,
                 params: { ...state.params, [action.payload.key]: action.payload.value }
             }
-        case HANDLE_SETUP_QUIZ_SELECT:
+        case TYPE.HANDLE_SETUP_QUIZ_SELECT:
             return {
                 ...state,
                 params: { ...state.params, [action.payload.key]: action.payload.value }
             }
-        case GET_TRIVIA_CREDENTIALS:
+        case TYPE.GET_TRIVIA_CREDENTIALS:
             return {
                 ...state,
                 ...action.payload
             }
-        case SET_QUESTIONS_DATA:
+        case TYPE.SET_QUESTIONS_DATA:
             return {
                 ...state,
                 questions_data: action.payload
             }
-        case GET_CURRENT_QUESTION:
+        case TYPE.GET_CURRENT_QUESTION:
             return {
                 ...state,
                 questions_data: action.payload.questions_data,
@@ -80,22 +78,22 @@ const quizReducer = (state = initialState, action) => {
                 score: action.payload.score,
                 chosen_answer: ''
             }
-        case HANDLE_ONCHANGE_RADIO:
+        case TYPE.HANDLE_ONCHANGE_RADIO:
             return {
                 ...state,
                 chosen_answer: action.payload
             }
-        case GET_QUIZ_RESULTS:
+        case TYPE.GET_QUIZ_RESULTS:
             return {
                 ...state,
                 quiz_results: action.payload
             }
-        case SET_MODAL:
+        case TYPE.SET_MODAL:
             return {
                 ...state,
                 [action.payload.modal]: action.payload.status
             }
-        case CLEAR_SETUP_QUIZ:
+        case TYPE.CLEAR_SETUP_QUIZ:
             return {
                 ...state,
                 params: {
