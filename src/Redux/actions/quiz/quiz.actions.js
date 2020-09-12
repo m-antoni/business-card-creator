@@ -33,7 +33,8 @@ export const setModal = (modal, status = true) => async dispatch => {
 // handle select 
 export const handleSelectTrivia = (selectOption) => async dispatch => {
 
-    let selected_param = { key: [selectOption.name], value: { value: selectOption.value, label: selectOption.label } };
+    let selected_param = { key: selectOption.name, value: { value: selectOption.value, label: selectOption.label } };
+
 
     dispatch({ type: TYPE.HANDLE_SETUP_QUIZ_SELECT, payload: selected_param });
 }
@@ -130,10 +131,7 @@ export const getQuestions = e => async (dispatch, getState) => {
             let removeLastChar = url_param.substr(0, url_param.length - 1);
             url_param = removeLastChar;
         }
-
-        // add token
-        // url_param += `token=${getTriviaTokenFromLocalStorage()}`;
-
+        
         console.log(url_param)
         dispatch(setLoading(true))
         TriviaAPIService.getQuestions(url_param).then(res => {
@@ -199,10 +197,29 @@ export const getCurrentQuestion = () => async dispatch => {
     }
 }
 
-// handle on change answer
-export const handleOnChangeRadio = e => async dispatch => {
+// Handle on change answer button
+export const handleOnChangeButton = answer => async (dispatch, getState) => {
+
+    let { correct_answer, question_index} = getState().quiz;
+
+    try {
+        
+        if(answer == '') return ToastDanger('Please Choose your Answer.');
+
+        if(correct_answer == answer)
+        {
+            setScore(getScore() + 1);
+        }
+        
+        setAnotherQuestionToLocalStorage(question_index + 1);
+        dispatch(getCurrentQuestion());
+
+    } catch (err) {
+        console.log(`Error: ${err}`)
+    }
+
     // console.log(e.target.value);
-    dispatch({ type: TYPE.HANDLE_ONCHANGE_RADIO, payload: e.target.value });
+    // dispatch({ type: TYPE.HANDLE_ONCHANGE_RADIO, payload: e.target.value });
 } 
 
 // handle submit answer
@@ -228,7 +245,7 @@ export const handleSubmitAnswer = () => async (dispatch, getState) => {
     $('input[name="radio-answer"]').prop('checked', false);
 }
 
-// store the data to firestore
+// Store the data to firestore
 export const saveQuizData = () => async (dispatch, getState) => {
     
     let { score } = getState().quiz;
@@ -269,7 +286,6 @@ export const saveQuizData = () => async (dispatch, getState) => {
         console.log(`Error: ${err}`);
         ToastDanger('Something went wrong...');
     })
-    
 }
 
 

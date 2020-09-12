@@ -1,18 +1,16 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { MiniSpinner } from '../../Layouts/Spinner';
 import { Modal } from 'react-bootstrap';
-import { MDBContainer, MDBBtn, MDBInput } from "mdbreact";
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import { handleSelectTrivia, handleInputOnChange, getQuestions } from '../../Redux/actions/quiz/quiz.actions';
-
 
 function SetupQuiz ({ quiz: { loading, trivia_amounts, trivia_categories, trivia_types, trivia_difficulties, params: { amount, category, difficulty, type } }, getQuestions, handleSelectTrivia, handleInputOnChange, show, onHide}) {
 
     return (
 		<Modal className="modal-container" show={show} onHide={onHide} size="md" animation={true}>
 		    <Modal.Header closeButton>
-                <Modal.Title><h5 className="text-muted">Setup your Quiz</h5></Modal.Title>
+                <Modal.Title><h5 className="text-muted">Setup Quiz</h5></Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {
@@ -35,10 +33,8 @@ function SetupQuiz ({ quiz: { loading, trivia_amounts, trivia_categories, trivia
                             <label htmlFor="sel-type">Select Type</label>
                             <Select options={trivia_types} onChange={handleSelectTrivia} defaultValue={type} id="sel-type"/>
                         </div> */}
-                    
                         <div className="form-group mt-2">
-                            <MDBBtn type="submit" className="btn btn-primary btn-block">Submit Now</MDBBtn>
-                            {/* <button type="button" onClick={onHide} className="btn btn-danger btn-block">Cancel</button> */}
+                            <button type="submit" className="btn btn-block">SUBMIT</button>
                         </div>
                     </form>
                 }

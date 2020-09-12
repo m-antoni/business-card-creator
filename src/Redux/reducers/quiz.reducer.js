@@ -1,6 +1,5 @@
 import * as TYPE from '../actions/types';
 
-
 const initialState = {
     params: {
         amount: { value: 10, label: 'Choose Number of Questions' },
@@ -8,7 +7,6 @@ const initialState = {
         difficulty: { value: '', label: 'Choose Difficulty' },
         type: { value: 'multiple', label: 'Choose Type' },
     },
-    trivia_categories: [],
     trivia_amounts: [
         { value: 5, label: 5, name: 'amount' },
         { value: 10, label: 10, name: 'amount' },
@@ -28,18 +26,19 @@ const initialState = {
         { value: 'multiple', label: 'Multiple Choice', name: 'type' },
         { value: 'boolean', label: 'True or False', name: 'type' },
     ],
+    trivia_categories: [],
     quiz_results: [],
     questions_data: [],
     current_question: [],
     question_index: 0,
     questions_total: 0,
     correct_answer: '',
-    chosen_answer: '', 
     start: false,
     score: 0,
     loading: false,
     setup_quiz_modal: false,
 }
+
 
 const quizReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -76,12 +75,6 @@ const quizReducer = (state = initialState, action) => {
                 correct_answer: action.payload.correct_answer,
                 question_index: action.payload.question_index,
                 score: action.payload.score,
-                chosen_answer: ''
-            }
-        case TYPE.HANDLE_ONCHANGE_RADIO:
-            return {
-                ...state,
-                chosen_answer: action.payload
             }
         case TYPE.GET_QUIZ_RESULTS:
             return {
@@ -97,10 +90,10 @@ const quizReducer = (state = initialState, action) => {
             return {
                 ...state,
                 params: {
-                    amount: { value: '', label: 'Choose Number of Questions' },
+                    amount: { value: 10, label: 'Choose Number of Questions' },
                     category: { value: '', label: 'Choose Category' },
                     difficulty: { value: '', label: 'Choose Difficulty' },
-                    type: { value: '', label: 'Choose Type' },
+                    type: { value: 'multiple', label: 'Choose Type' },
                 },
                 setup_quiz_modal: false
             }

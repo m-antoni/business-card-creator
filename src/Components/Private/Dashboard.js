@@ -16,42 +16,30 @@ function Dashboard({ quiz: { setup_quiz_modal, quiz_results }, setModal, getCate
     
     return (
         <Fragment>
-            <MDBContainer>
-                <MDBRow>
-                    <MDBCol md="6">
-                        <MDBCard>
-                            <MDBCardImage className="img-fluid" src="/assets/img/quiz.jpeg" waves />
-                            <MDBCardBody>
-                            <MDBCardTitle>Take A Quiz</MDBCardTitle>
-                            <MDBCardText>Click below to chose your category.</MDBCardText>
-                            <MDBBtn onClick={() => setModal('setup_quiz_modal')} href="#">Start Now</MDBBtn>
-                            </MDBCardBody>
-                        </MDBCard>
-                    </MDBCol>
-                    <MDBCol md="2"></MDBCol>
-                    <MDBCol md="4">
-                        <MDBCard>
-                            <MDBCardBody>
-                                <MDBCardTitle>Your Records</MDBCardTitle>
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-12 col-md-6">
+                        <div className="card mb-4">
+                        <div className="card-image"><img src="/assets/img/quiz.jpeg" className="img-fluid waves" alt="img"/></div>
+                            <div className="card-body">
+                                <button onClick={() => setModal('setup_quiz_modal')} className="btn btn-primary btn-block">START QUIZ</button>
+                                <div className="container my-3">
                                 {
                                     quiz_results.length == 0 ? <MiniSpinner/>
                                     :
-                                    <Fragment>
-                                        {
-                                            quiz_results && quiz_results.map(data => (
-                                                <div><strong>Score:</strong> {data.score} <span className="float-right"><MDBCardText>{moment(data.created_at.toDate()).format('M-D-Y h:mm A')}</MDBCardText></span><hr/></div>
-                                            )) 
-                                        }
-                                        <a href="#" className="btn-block text-center">VIEW ALL RESULT</a>
-                                    </Fragment>
-
+                                    quiz_results && quiz_results.map(data => (
+                                        <div><strong>Score:</strong> {data.score} <span className="float-right"><MDBCardText>{moment(data.created_at.toDate()).format('M-D-Y h:mm A')}</MDBCardText></span><hr/></div>
+                                    )) 
                                 }
-                            </MDBCardBody>
-                        </MDBCard>
-                    </MDBCol>
-                </MDBRow>
-            </MDBContainer>
-            
+                                </div>
+                            </div>
+                            <div className="card-footer">
+                                <a href="#" className="btn-block text-center">VIEW ALL RESULT</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <SetupQuiz show={setup_quiz_modal} onHide={() => setModal('setup_quiz_modal', false)}/>
         </Fragment>
     )
