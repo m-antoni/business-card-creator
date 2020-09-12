@@ -37,8 +37,9 @@ const initialState = {
     score: 0,
     loading: false,
     setup_quiz_modal: false,
+    counter: 10,
+    timeout: false
 }
-
 
 const quizReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -75,6 +76,7 @@ const quizReducer = (state = initialState, action) => {
                 correct_answer: action.payload.correct_answer,
                 question_index: action.payload.question_index,
                 score: action.payload.score,
+                timeout: false
             }
         case TYPE.GET_QUIZ_RESULTS:
             return {
@@ -85,6 +87,11 @@ const quizReducer = (state = initialState, action) => {
             return {
                 ...state,
                 [action.payload.modal]: action.payload.status
+            }
+        case TYPE.SET_COUNTER:
+            return {
+                ...state,
+                counter: action.payload
             }
         case TYPE.CLEAR_SETUP_QUIZ:
             return {

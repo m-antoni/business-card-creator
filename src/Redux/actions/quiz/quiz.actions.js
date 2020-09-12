@@ -7,6 +7,9 @@ import { SwalSuccess } from '../../../Utils/SweetAlert';
 import { TriviaAPIService } from './_api.quiz';
 import Swal from 'sweetalert2';
 
+// Set Counter
+export const setCounter = counter => async dispatch => dispatch({type: TYPE.SET_COUNTER, payload: counter});
+
 // set loading
 export const setLoading = (status) => async dispatch => dispatch({ type: TYPE.SET_LOADING, payload: status });
 
@@ -206,44 +209,28 @@ export const handleOnChangeButton = answer => async (dispatch, getState) => {
         
         if(answer == '') return ToastDanger('Please Choose your Answer.');
 
+        // validation
         if(correct_answer == answer)
         {
+            ToastSuccess('CORRECT ANSWER');
             setScore(getScore() + 1);
         }
-        
+
         setAnotherQuestionToLocalStorage(question_index + 1);
         dispatch(getCurrentQuestion());
+        dispatch(setCounter(10));
 
     } catch (err) {
         console.log(`Error: ${err}`)
     }
-
-    // console.log(e.target.value);
-    // dispatch({ type: TYPE.HANDLE_ONCHANGE_RADIO, payload: e.target.value });
 } 
 
-// handle submit answer
-export const handleSubmitAnswer = () => async (dispatch, getState) => {
-
-    let { correct_answer, question_index, chosen_answer} = getState().quiz;
-
-    try {
-        
-        if(chosen_answer == '') return ToastDanger('Please Choose your Answer.');
-
-        if(correct_answer == chosen_answer)
-        {
-            setScore(getScore() + 1);
-        }
-        
-        setAnotherQuestionToLocalStorage(question_index + 1);
-        dispatch(getCurrentQuestion());
-    } catch (err) {
-        console.log(`Error: ${err}`)
-    }
-
-    $('input[name="radio-answer"]').prop('checked', false);
+export const setNextQuestion = index => async dispatch => {
+    setAnotherQuestionToLocalStorage(index + 1);
+    dispatch(getCurrentQuestion());
+    dispatch(setCounter(10));
 }
+
 
 // Store the data to firestore
 export const saveQuizData = () => async (dispatch, getState) => {

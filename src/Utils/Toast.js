@@ -3,17 +3,17 @@ import iziToast from "izitoast";
 
 export const ToastSuccess = message => 
 {
-	iziToast.show({
+	iziToast.success({
         title: "Success",
         icon: "ico-success",
         message: message,
-        iconColor: "rgb(0, 255, 184)",
-        theme: "dark",
-        progressBarColor: "rgb(0, 255, 184)",
+        // iconColor: "rgb(0, 255, 184)",
+        // theme: "dark",
+        // progressBarColor: "rgb(0, 255, 184)",
         position: "topCenter",
-        transitionIn: "bounceInLeft",
+        transitionIn: "bounceInDown",
         transitionOut: "fadeOut",
-        timeout: 4000
+        timeout: 2000
     });
 }
 
