@@ -5,7 +5,7 @@ import Select from 'react-select';
 import { connect } from 'react-redux';
 import { handleSelectTrivia, handleInputOnChange, getQuestions } from '../../Redux/actions/quiz/quiz.actions';
 
-function SetupQuiz ({ quiz: { loading, trivia_amounts, trivia_categories, trivia_types, trivia_difficulties, params: { amount, category, difficulty, type } }, getQuestions, handleSelectTrivia, handleInputOnChange, show, onHide}) {
+function SetupQuiz ({ quiz: { mini_loading, trivia_amounts, trivia_categories, trivia_types, trivia_difficulties, params: { amount, category, difficulty, type } }, getQuestions, handleSelectTrivia, handleInputOnChange, show, onHide}) {
 
     return (
 		<Modal className="modal-container" show={show} onHide={onHide} size="md" animation={true}>
@@ -14,7 +14,7 @@ function SetupQuiz ({ quiz: { loading, trivia_amounts, trivia_categories, trivia
             </Modal.Header>
             <Modal.Body>
                 {
-                    loading ? <div className="my-5"><MiniSpinner/></div>
+                    mini_loading ? <div className="my-5"><MiniSpinner/></div>
                     :
                     <form onSubmit={getQuestions}>
                         {/* <div className="form-group">

@@ -6,7 +6,7 @@ import moment from 'moment';
 import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardImage, MDBCardTitle, MDBCardText, MDBBtn, MDBCardBody } from "mdbreact";
 import { setModal, getCategories, getTriviaAPIToken, getAllQuiz } from '../../Redux/actions/quiz/quiz.actions';
 
-function Dashboard({ quiz: { setup_quiz_modal, quiz_results }, setModal, getCategories, getTriviaAPIToken, getAllQuiz }) {
+function Dashboard({ quiz: { setup_quiz_modal, quiz_results, loading }, setModal, getCategories, getTriviaAPIToken, getAllQuiz }) {
     
     useEffect(() => {
         getCategories();
@@ -25,17 +25,20 @@ function Dashboard({ quiz: { setup_quiz_modal, quiz_results }, setModal, getCate
                                 <button onClick={() => setModal('setup_quiz_modal')} className="btn btn-primary btn-block">START QUIZ</button>
                                 <div className="container my-3">
                                 {
-                                    quiz_results.length == 0 ? <MiniSpinner/>
-                                    :
-                                    quiz_results && quiz_results.map(data => (
+                                    loading ? <MiniSpinner/> :
+                                    quiz_results.length > 0 ? quiz_results.map(data => (
                                         <div><strong>Score:</strong> {data.score} <span className="float-right"><MDBCardText>{moment(data.created_at.toDate()).format('M-D-Y h:mm A')}</MDBCardText></span><hr/></div>
-                                    )) 
+                                    ))
+                                    : <div className="text-center mt-3">No Records Yet.</div>
                                 }
                                 </div>
                             </div>
-                            <div className="card-footer">
-                                <a href="#" className="btn-block text-center">VIEW ALL RESULT</a>
-                            </div>
+                           {
+                               quiz_results.length > 0 &&  
+                                <div className="card-footer">
+                                    <a href="#" className="btn-block text-center">VIEW ALL RESULT</a>
+                                </div>
+                           }
                         </div>
                     </div>
                 </div>

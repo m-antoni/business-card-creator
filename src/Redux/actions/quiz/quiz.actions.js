@@ -12,6 +12,7 @@ export const setCounter = counter => async dispatch => dispatch({type: TYPE.SET_
 
 // set loading
 export const setLoading = (status) => async dispatch => dispatch({ type: TYPE.SET_LOADING, payload: status });
+export const setMiniLoading = (status) => async dispatch => dispatch({ type: TYPE.SET_MINI_LOADING, payload: status });
 
 // handle input
 export const handleInputOnChange = e => async dispatch => dispatch({ type: TYPE.HANDLE_SETUP_QUIZ_INPUT, payload: { key: e.target.name, value: e.target.value } });
@@ -135,8 +136,8 @@ export const getQuestions = e => async (dispatch, getState) => {
             url_param = removeLastChar;
         }
         
-        console.log(url_param)
-        dispatch(setLoading(true))
+        // console.log(url_param)
+        dispatch(setMiniLoading(true))
         TriviaAPIService.getQuestions(url_param).then(res => {
             switch (res.data.response_code) {
                 case 1:
@@ -151,38 +152,63 @@ export const getQuestions = e => async (dispatch, getState) => {
                 case 0:
                     setQuestionsToLocalStorage(res.data.results);
                     dispatch(clearSetupQuiz());
-                    window.location.href = '/dashboard/quiz-view';
+                    window.location.href = '/dashboard/quiz';
                 default:
                     break;
             }
-            dispatch(setLoading(false))
+            dispatch(setMiniLoading(false))
         })
         .catch(err => {
-            dispatch(setLoading(false))
+            dispatch(setMiniLoading(false))
             ToastDanger('Something went wrong...');
             console.log(err);
         })
 
     } catch (err) {
         ToastDanger('Something went wrong...');
-        dispatch(setLoading(false))
+        dispatch(setMiniLoading(false))
         console.log(err)
     }
 }
 
+
+// Handle Answer button
+export const handleOnChangeButton = (answer) => async (dispatch, getState) => {
+
+    let { correct_answer, question_index} = getState().quiz;
+
+    try {
+        
+        if(answer == '') return ToastDanger('Please Choose your Answer.');
+
+        // Show success if correct
+        if(correct_answer == answer)
+        {
+            ToastSuccess('CORRECT ANSWER');
+            setScore(getScore() + 1);
+        }
+
+        if(question_index == 9) return dispatch(saveQuizData());
+
+        setAnotherQuestionToLocalStorage(question_index + 1);
+        dispatch(getCurrentQuestion());
+        dispatch(setCounter(10));
+
+    } catch (err) {
+        console.log(`Error: ${err}`)
+    }
+} 
+
+
 // get the quiz start
 export const getCurrentQuestion = () => async dispatch => {
+    
     let questions_data = getQuestionsFromLocalStorage();
     let current_question = getCurrentQuestionFromLocalStorage();
     let question_index = getQuestionIndex();
     let score = getScore();
 
     try {
-
-        if(questions_data.length == question_index)
-        {
-           dispatch(saveQuizData())
-        }
 
         let params = {
             current_question: current_question,
@@ -200,31 +226,8 @@ export const getCurrentQuestion = () => async dispatch => {
     }
 }
 
-// Handle on change answer button
-export const handleOnChangeButton = answer => async (dispatch, getState) => {
 
-    let { correct_answer, question_index} = getState().quiz;
-
-    try {
-        
-        if(answer == '') return ToastDanger('Please Choose your Answer.');
-
-        // validation
-        if(correct_answer == answer)
-        {
-            ToastSuccess('CORRECT ANSWER');
-            setScore(getScore() + 1);
-        }
-
-        setAnotherQuestionToLocalStorage(question_index + 1);
-        dispatch(getCurrentQuestion());
-        dispatch(setCounter(10));
-
-    } catch (err) {
-        console.log(`Error: ${err}`)
-    }
-} 
-
+// Set to next question if counter is 0
 export const setNextQuestion = index => async dispatch => {
     setAnotherQuestionToLocalStorage(index + 1);
     dispatch(getCurrentQuestion());
@@ -234,9 +237,9 @@ export const setNextQuestion = index => async dispatch => {
 
 // Store the data to firestore
 export const saveQuizData = () => async (dispatch, getState) => {
-    
-    let { score } = getState().quiz;
+
     let uid = getUID();
+    let score = getScore();
 
     const db = firebase.firestore();
 
@@ -247,28 +250,8 @@ export const saveQuizData = () => async (dispatch, getState) => {
         updated_at: new Date()
     })
     .then(res => {
-
-        try {
-
-            const docRef = db.collection('quizzes').doc(res.id);
-
-            docRef.get().then(doc => {
-
-                let score = doc.data().score
-                if(score == 0)
-                {
-                    ToastSuccess(`Sorry you only got Score ${score}`)
-                }
-                else
-                {
-                    // ToastSuccess(`Congratulations your Score: ${score}`);
-                    SwalSuccess(`Congratulations your score: ${score}`)
-                }
-            })
-    
-        } catch (error) {
-            console.log(`Error: ${error}`)
-        }
+        console.log('SUCCESS')
+        dispatch({type: TYPE.SAVED_SUCCESS })
     }).catch((err) => {
         console.log(`Error: ${err}`);
         ToastDanger('Something went wrong...');
@@ -279,16 +262,22 @@ export const saveQuizData = () => async (dispatch, getState) => {
 // fetch all the quiz score
 export const getAllQuiz = () => async dispatch => {
     
+    dispatch(setLoading(true));
+
+    const uid = getUID();
     const db = firebase.firestore();
 
-    db.collection('quizzes').orderBy('created_at', 'desc').limit(4).get()
+    db.collection('quizzes').where('uid', '==', uid).orderBy('created_at','desc').limit(5).get()
     .then(snapshot => {
         let quiz_results = [];
         snapshot.docs.map(doc => quiz_results.push(doc.data()));
         
         dispatch({ type: TYPE.GET_QUIZ_RESULTS, payload: quiz_results });
+        dispatch(setLoading(false));
+
     })
     .catch(err => {
+        dispatch(setLoading(false));
         console.log(`Error: ${err}`);
         ToastDanger('Something went wrong...');
     })

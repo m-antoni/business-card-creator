@@ -1,5 +1,6 @@
 //  TYPES HERE
 export const SET_LOADING = 'SET_LOADING';   
+export const SET_MINI_LOADING = 'SET_MINI_LOADING';   
 
 // Auth
 export const SET_COUNTRY = 'SET_COUNTRY';
@@ -19,6 +20,7 @@ export const SET_QUESTIONS_DATA = 'SET_QUESTIONS_DATA';
 export const GET_CURRENT_QUESTION = 'GET_CURRENT_QUESTION';
 export const GET_QUIZ_RESULTS = 'GET_QUIZ_RESULTS';
 export const SET_COUNTER = 'SET_COUNTER';
+export const SAVED_SUCCESS = 'SAVED_SUCCESS';
 
 
 

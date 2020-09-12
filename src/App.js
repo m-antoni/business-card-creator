@@ -19,6 +19,7 @@ import SignIn from './Components/Public/SignIn';
 import ForgotPassword from './Components/Public/ForgotPassword';
 import QuizView from './Components/Private/QuizView';
 import Dashboard from './Components/Private/Dashboard';
+import QuizResult from './Components/Private/QuizResult';
 
 function App() {
   return (
@@ -31,7 +32,8 @@ function App() {
                   <PublicRoute path="/signup" exact component={SignUp}/>
                   <PublicRoute path="/forgot-password" exact component={ForgotPassword}/>
                   <PrivateRoute path="/dashboard" exact component={Dashboard}/>
-                  <PrivateRoute path="/dashboard/quiz-view" exact component={QuizView}/>
+                  <PrivateRoute path="/dashboard/quiz" exact component={QuizView}/>
+                  <PrivateRoute path="/dashboard/quiz/result" exact component={QuizResult}/>
               </Switch>
             </Fragment>
         </PersistGate>

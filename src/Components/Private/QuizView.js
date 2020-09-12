@@ -6,7 +6,7 @@ import Interweave, { Markup } from 'interweave';
 import { renderHTML, getQuizStart } from '../../Utils/Common';
 import { Spinner } from 'react-bootstrap';
 
-function QuizView({ quiz: { counter, score, current_question, question_index, questions_data, loading, validation, timeout },
+function QuizView({ quiz: { counter, score, current_question, question_index, questions_data, loading, result, result_url },
      getCurrentQuestion, handleOnChangeButton, setCounter, setNextQuestion}) {
 
     useEffect(() => {
@@ -14,6 +14,7 @@ function QuizView({ quiz: { counter, score, current_question, question_index, qu
         const value = counter <= 10 ? `0${counter - 1}` : counter - 1;
         const timer = counter > 0 && setInterval(() => setCounter(value), 1000);
         
+        // Check and skip to next
         if(counter == 0)
         {
             setNextQuestion(question_index)
@@ -22,10 +23,9 @@ function QuizView({ quiz: { counter, score, current_question, question_index, qu
         return () => clearInterval(timer);
     },[counter])
 
-    if(!getQuizStart())
-    {
-        return <Redirect to='/dashboard'/>
-    }
+    if(result) return <Redirect to={result_url}/>
+    
+    if(!getQuizStart())  return <Redirect to='/dashboard'/>
 
     return (
         <div className="container">

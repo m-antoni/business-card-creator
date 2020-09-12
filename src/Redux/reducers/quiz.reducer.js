@@ -38,7 +38,10 @@ const initialState = {
     loading: false,
     setup_quiz_modal: false,
     counter: 10,
-    timeout: false
+    timeout: false,
+    result: false,
+    dashboard_url: '/dashboard',
+    result_url: '/dashboard/quiz/result'
 }
 
 const quizReducer = (state = initialState, action) => {
@@ -47,6 +50,11 @@ const quizReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: action.payload
+            }
+        case TYPE.SET_MINI_LOADING:
+            return {
+                ...state,
+                mini_loading: action.payload
             }
         case TYPE.HANDLE_SETUP_QUIZ_INPUT:
             return {
@@ -92,6 +100,11 @@ const quizReducer = (state = initialState, action) => {
             return {
                 ...state,
                 counter: action.payload
+            }
+        case TYPE.SAVED_SUCCESS:
+            return {
+                ...state,
+                result: true
             }
         case TYPE.CLEAR_SETUP_QUIZ:
             return {
