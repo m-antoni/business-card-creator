@@ -47,7 +47,7 @@ function QuizView({ quiz: { counter, score, current_question, question_index, qu
                         <div className="col-4 text-center">
                             <div className="card card-body">
                                 <div>Score</div>
-                                <h4>{score}</h4>
+                                <h4 className={score > 0 ? 'text-success': ''}><strong>{score}</strong></h4>
                             </div>
                         </div>
                         <div className="col-12 mt-3">

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { MiniSpinner } from '../../Layouts/Spinner';
 import SetupQuiz from './SetupQuiz.modal';
 import moment from 'moment';
-import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardImage, MDBCardTitle, MDBCardText, MDBBtn, MDBCardBody } from "mdbreact";
+import {  MDBCardText } from "mdbreact";
 import { setModal, getCategories, getTriviaAPIToken, getAllQuiz } from '../../Redux/actions/quiz/quiz.actions';
 
 function Dashboard({ quiz: { setup_quiz_modal, quiz_results, loading }, setModal, getCategories, getTriviaAPIToken, getAllQuiz }) {
@@ -20,7 +20,7 @@ function Dashboard({ quiz: { setup_quiz_modal, quiz_results, loading }, setModal
                 <div className="row justify-content-center">
                     <div className="col-12 col-md-6">
                         <div className="card mb-4">
-                        <div className="card-image"><img src="/assets/img/quiz.jpeg" className="img-fluid waves" alt="img"/></div>
+                        <div className="card-image"><img src="/assets/img/quiz.jpg" className="img-fluid waves" alt="img"/></div>
                             <div className="card-body">
                                 <button onClick={() => setModal('setup_quiz_modal')} className="btn btn-primary btn-block">START QUIZ</button>
                                 <div className="container my-3">
@@ -33,12 +33,12 @@ function Dashboard({ quiz: { setup_quiz_modal, quiz_results, loading }, setModal
                                 }
                                 </div>
                             </div>
-                           {
+                           {/* {
                                quiz_results.length > 0 &&  
                                 <div className="card-footer">
                                     <a href="#" className="btn-block text-center">VIEW ALL RESULT</a>
                                 </div>
-                           }
+                           } */}
                         </div>
                     </div>
                 </div>

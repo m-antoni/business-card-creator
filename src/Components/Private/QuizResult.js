@@ -20,7 +20,7 @@ function QuizResult({ quiz:{ result, dashboard_url } }) {
                                 <div className="my-2">SCORE</div>
                                 <h2>{score} <span style={textStyle}>of</span> 10</h2>
                                 <hr/>
-                            <a href={dashboard_url} className="btn btn-block mt-2">Try Again</a>
+                            <a href={dashboard_url} className="btn btn-block btn-primary mt-2">Try Again</a>
                         </div>
                     </div>
                 </div>

@@ -33,7 +33,7 @@ function SetupQuiz ({ quiz: { mini_loading, trivia_amounts, trivia_categories, t
                             <label htmlFor="sel-type">Select Type</label>
                             <Select options={trivia_types} onChange={handleSelectTrivia} defaultValue={type} id="sel-type"/>
                         </div> */}
-                        <div className="form-group mt-2">
+                        <div className="form-group mt-4">
                             <button type="submit" className="btn btn-block">SUBMIT</button>
                         </div>
                     </form>

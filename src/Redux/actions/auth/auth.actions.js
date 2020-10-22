@@ -1,29 +1,26 @@
-import { SET_LOADING, AUTH_SUCCESS, AUTH_ERROR, HANDLE_INPUT_ON_CHANGE, CLEAR_AUTH, SET_COUNTRY, HANDLE_SELECT_COUNTRY, SIGN_OUT_SUCCESS } from './../types';
+import * as TYPE from './../types';
 import firebase from '../../../Services/firebase';
 import { SwalSuccess, SwalError } from '../../../Utils/SweetAlert';
 import countryList from 'react-select-country-list';
 import { setUserSession, removeUserSession } from '../../../Utils/Common';
-import { ToastQuestion } from '../../../Utils/Toast';
 
-export const setLoading = (status) => async dispatch => dispatch({ type: SET_LOADING, payload: status });
+export const setLoading = (status) => async dispatch => dispatch({ type: TYPE.SET_LOADING, payload: status });
 
-export const handleInputOnChange = e => async dispatch => dispatch({ type: HANDLE_INPUT_ON_CHANGE, payload: { key: e.target.name, value: e.target.value } });
+export const handleInputOnChange = e => async dispatch => dispatch({ type: TYPE.HANDLE_INPUT_ON_CHANGE, payload: { key: e.target.name, value: e.target.value } });
 
-export const clearAuth = () => async dispatch => dispatch({ type: CLEAR_AUTH });
+export const clearAuth = () => async dispatch => dispatch({ type: TYPE.CLEAR_AUTH });
 
 export const fetchCountryData = () => async dispatch => {
 
     const countryData = countryList().getData();
-
-    dispatch({ type: SET_COUNTRY, payload: countryData });
-    
+    dispatch({ type: TYPE.SET_COUNTRY, payload: countryData });
 }
 
 export const handleSelectCountry = (selectOption) => async dispatch => {
-    dispatch({ type: HANDLE_SELECT_COUNTRY, payload: selectOption });    
+    dispatch({ type: TYPE.HANDLE_SELECT_COUNTRY, payload: selectOption });    
 }
 
-// handle sign-in
+// Sign In
 export const handleSignIn = e => async (dispatch, getState) => {
     e.preventDefault();
 
@@ -54,7 +51,7 @@ export const handleSignIn = e => async (dispatch, getState) => {
         });
 }
 
-// handle sign-up
+//  Sign-Up
 export const handleSignUp = e => async (dispatch, getState) => {
     e.preventDefault();
 
@@ -82,7 +79,7 @@ export const handleSignUp = e => async (dispatch, getState) => {
                 })
             })
             .then(() => {
-
+                
                 // sign-in user
                 firebase.auth().signInWithEmailAndPassword(input_params.email, input_params.password)
 

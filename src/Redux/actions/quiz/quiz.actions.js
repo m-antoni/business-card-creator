@@ -199,7 +199,6 @@ export const handleOnChangeButton = (answer) => async (dispatch, getState) => {
     }
 } 
 
-
 // get the quiz start
 export const getCurrentQuestion = () => async dispatch => {
     
